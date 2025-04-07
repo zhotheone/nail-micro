@@ -144,8 +144,8 @@ const Procedures = {
                     <p>${formattedPrice} • ${durationText}</p>
                 </div>
                 <div class="list-item-actions">
-                    <button class="action-btn btn-edit" data-id="${procedure._id}" data-action="edit-procedure">✏️</button>
-                    <button class="action-btn btn-cancel" data-id="${procedure._id}" data-action="delete-procedure">🗑️</button>
+                    <button class="action-btn btn-edit" data-id="${procedure._id}" data-action="edit-procedure" aria-label="Редагувати"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn btn-cancel" data-id="${procedure._id}" data-action="delete-procedure" aria-label="Видалити"><i class="fas fa-trash"></i></button>
                 </div>
             `;
             

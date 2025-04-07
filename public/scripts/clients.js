@@ -91,6 +91,14 @@ const Clients = {
             return (a.name + ' ' + a.surName).localeCompare(b.name + ' ' + b.surName);
         });
         
+        // Додавання заголовку з кількістю клієнтів
+        const headerContainer = document.createElement('div');
+        headerContainer.className = 'clients-header';
+        headerContainer.innerHTML = `
+            <h2>Клієнти <span class="client-count">${sortedClients.length}</span></h2>
+        `;
+        clientsList.appendChild(headerContainer);
+        
         // Створення елементів пошуку
         const searchContainer = document.createElement('div');
         searchContainer.className = 'search-container';

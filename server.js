@@ -372,6 +372,34 @@ app.get('/api/appointments/date/:date', async (req, res) => {
     }
 });
 
+// Пошук записів за днем та місяцем (незалежно від року)
+app.get('/api/appointments/search', async (req, res) => {
+    try {
+        const { day, month } = req.query;
+        
+        if (!day || !month) {
+            return res.status(400).json({ message: 'Потрібно вказати день та місяць для пошуку' });
+        }
+        
+        // Знаходимо всі записи
+        const appointments = await Appointment.find()
+            .populate('clientId')
+            .populate('procedureId');
+        
+        // Фільтруємо записи за днем та місяцем, незалежно від року
+        const filteredAppointments = appointments.filter(appointment => {
+            const date = new Date(appointment.time);
+            return date.getDate() === parseInt(day) && date.getMonth() === parseInt(month) - 1;
+        });
+        
+        console.log(`Знайдено записів за день ${day} та місяць ${month}: ${filteredAppointments.length}`);
+        res.json(filteredAppointments);
+    } catch (err) {
+        console.error('Помилка пошуку записів за днем та місяцем:', err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // Отримання записів за період
 app.get('/api/appointments/period/:startDate/:endDate', async (req, res) => {
     try {
@@ -429,34 +457,6 @@ app.get('/api/appointments/date/:date', async (req, res) => {
         res.json(appointments);
     } catch (err) {
         console.error('Помилка отримання записів на дату:', err);
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Пошук записів за днем та місяцем (незалежно від року)
-app.get('/api/appointments/search', async (req, res) => {
-    try {
-        const { day, month } = req.query;
-        
-        if (!day || !month) {
-            return res.status(400).json({ message: 'Потрібно вказати день та місяць для пошуку' });
-        }
-        
-        const appointments = await Appointment.find()
-            .populate('clientId')
-            .populate('procedureId')
-            .sort({ time: 1 });
-        
-        // Фільтруємо записи за днем та місяцем, незалежно від року
-        const filteredAppointments = appointments.filter(appointment => {
-            const date = new Date(appointment.time);
-            return date.getDate() === parseInt(day) && date.getMonth() === parseInt(month) - 1;
-        });
-        
-        console.log(`Знайдено записів за день ${day} та місяць ${month}: ${filteredAppointments.length}`);
-        res.json(filteredAppointments);
-    } catch (err) {
-        console.error('Помилка пошуку записів за днем та місяцем:', err);
         res.status(500).json({ message: err.message });
     }
 });

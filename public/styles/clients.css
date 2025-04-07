@@ -11,6 +11,22 @@
     font-size: var(--md-font-size-headline);
     font-weight: 500;
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--md-spacing-sm);
+}
+
+.client-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: var(--md-font-size-body);
+    font-weight: 500;
 }
 
 /* Пошук клієнтів */
@@ -200,8 +216,8 @@
 }
 
 .action-btn {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: var(--md-surface-variant);
     color: var(--md-text-medium);
@@ -211,28 +227,30 @@
     justify-content: center;
     cursor: pointer;
     transition: all var(--md-transition-standard);
-    font-size: 16px;
+    font-size: 18px;
+    box-shadow: var(--md-elevation-1);
 }
 
 .action-btn:hover, .action-btn:focus {
     background-color: rgba(224, 222, 244, 0.1);
     color: var(--md-text-high);
     transform: scale(1.1);
+    box-shadow: var(--md-elevation-2);
 }
 
 .action-btn.btn-edit:hover {
-    background-color: rgba(156, 207, 216, 0.2);
-    color: var(--md-secondary);
+    background-color: var(--md-secondary-dark);
+    color: white;
 }
 
 .action-btn.btn-confirm:hover {
-    background-color: rgba(49, 116, 143, 0.2);
-    color: var(--md-success);
+    background-color: var(--md-success);
+    color: white;
 }
 
 .action-btn.btn-cancel:hover {
-    background-color: rgba(235, 111, 146, 0.2);
-    color: var(--md-error);
+    background-color: var(--md-error);
+    color: white;
 }
 
 /* Анімація появи */

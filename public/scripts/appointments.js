@@ -86,16 +86,21 @@ const Appointments = {
                         const month = window.appState.selectedDate.getMonth() + 1;
                         
                         // Використовуємо новий метод API для пошуку за днем/місяцем
-                        const dayMonthAppointments = await apiClient.searchAppointmentsByDayMonth(day, month);
-                        
-                        if (dayMonthAppointments.length > 0) {
-                            // Якщо знайдено записи з іншими роками, показуємо підказку
-                            const years = [...new Set(dayMonthAppointments.map(app => new Date(app.time).getFullYear()))].sort();
+                        try {
+                            const dayMonthAppointments = await apiClient.searchAppointmentsByDayMonth(day, month);
                             
-                            if (years.length > 0) {
-                                const yearsText = years.join(', ');
-                                Toast.info(`Знайдено записи на ${day}.${month} в інших роках: ${yearsText}. Виберіть потрібний рік у селекторі вгорі.`, 'Підказка', { duration: 7000 });
+                            if (dayMonthAppointments.length > 0) {
+                                // Якщо знайдено записи з іншими роками, показуємо підказку
+                                const years = [...new Set(dayMonthAppointments.map(app => new Date(app.time).getFullYear()))].sort();
+                                
+                                if (years.length > 0) {
+                                    const yearsText = years.join(', ');
+                                    Toast.info(`Знайдено записи на ${day}.${month} в інших роках: ${yearsText}. Виберіть потрібний рік у селекторі вгорі.`, 'Підказка', { duration: 7000 });
+                                }
                             }
+                        } catch (searchError) {
+                            // Ігноруємо помилку пошуку, щоб не заважати основному функціоналу
+                            console.log('Не вдалося виконати пошук за днем і місяцем:', searchError);
                         }
                     } catch (error) {
                         // Ігноруємо помилку, просто продовжуємо
