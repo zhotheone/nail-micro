@@ -1,4 +1,4 @@
-/* Спливаючі вікна */
+/* Модальні вікна в стилі Material Design */
 .modal {
     display: none;
     position: fixed;
@@ -6,12 +6,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: var(--z-modal);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: var(--md-z-modal);
     overflow-y: auto;
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
     opacity: 0;
-    transition: opacity var(--transition-normal);
+    transition: opacity var(--md-transition-standard);
 }
 
 .modal.active {
@@ -20,17 +20,17 @@
 }
 
 .modal-content {
-    background-color: var(--surface);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    padding: var(--spacing-lg);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg) var(--md-radius-lg) 0 0;
+    padding: var(--md-spacing-lg);
     position: absolute;
     bottom: 0;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
     transform: translateY(100%);
-    transition: transform var(--transition-normal);
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform var(--md-transition-standard);
+    box-shadow: var(--md-elevation-4);
 }
 
 .modal.active .modal-content {
@@ -41,54 +41,71 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--md-spacing-md);
+    padding-bottom: var(--md-spacing-sm);
+    border-bottom: 1px solid rgba(224, 222, 244, 0.1);
 }
 
 .modal-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--foam);
+    font-size: var(--md-font-size-title);
+    font-weight: 500;
+    color: var(--md-text-high);
 }
 
 .modal-close {
     background: none;
     border: none;
-    font-size: 24px;
-    color: var(--muted);
+    color: var(--md-text-medium);
     cursor: pointer;
-    transition: color var(--transition-fast);
-    width: 32px;
-    height: 32px;
+    transition: all var(--md-transition-standard);
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-circle);
+    border-radius: 50%;
+    font-size: 24px;
+    padding: 0;
 }
 
-.modal-close:hover {
-    color: var(--text);
-    background-color: var(--overlay);
+.modal-close:hover, .modal-close:focus {
+    color: var(--md-text-high);
+    background-color: rgba(224, 222, 244, 0.1);
 }
 
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    margin-top: var(--spacing-md);
-    padding-top: var(--spacing-sm);
-    border-top: 1px solid var(--border-color);
-    gap: var(--spacing-sm);
+    margin-top: var(--md-spacing-md);
+    padding-top: var(--md-spacing-sm);
+    border-top: 1px solid rgba(224, 222, 244, 0.1);
+    gap: var(--md-spacing-sm);
 }
 
-/* Спеціальні типи модальних вікон */
-.modal-confirm .modal-content {
-    max-width: 400px;
+/* Dialog модальні вікна (з центруванням) */
+.modal-dialog .modal-content {
+    max-width: 500px;
     margin: 0 auto;
-    border-radius: var(--radius-xl);
+    border-radius: var(--md-radius-lg);
     top: 50%;
     transform: translateY(-50%) scale(0.9);
     bottom: auto;
+}
+
+.modal-dialog.active .modal-content {
+    transform: translateY(-50%) scale(1);
+}
+
+/* Вікно підтвердження */
+.modal-confirm .modal-content {
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: var(--md-radius-lg);
+    top: 50%;
+    transform: translateY(-50%) scale(0.9);
+    bottom: auto;
+    text-align: center;
+    padding: var(--md-spacing-lg);
 }
 
 .modal-confirm.active .modal-content {
@@ -96,26 +113,32 @@
 }
 
 .modal-confirm .modal-body {
-    text-align: center;
-    padding: var(--spacing-md) 0;
+    padding: var(--md-spacing-md) 0;
 }
 
 .modal-confirm .modal-icon {
     font-size: 48px;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-md);
     display: block;
 }
 
 .modal-confirm .modal-icon.warning {
-    color: var(--warning-color);
+    color: var(--md-warning);
 }
 
 .modal-confirm .modal-icon.danger {
-    color: var(--danger-color);
+    color: var(--md-error);
 }
 
 .modal-confirm .modal-message {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-md);
+    font-size: var(--md-font-size-subtitle);
+}
+
+.modal-confirm .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--md-spacing-md);
 }
 
 /* Анімація для модального вмісту */
@@ -124,7 +147,7 @@
         transform: scale(1);
     }
     50% {
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
     100% {
         transform: scale(1);
@@ -135,12 +158,31 @@
     animation: modalPulse 0.3s ease-in-out;
 }
 
+/* Прокрутка модального вікна */
+.modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--md-text-disabled) transparent;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: var(--md-text-disabled);
+    border-radius: var(--md-radius-circle);
+}
+
 /* Адаптивність модальних вікон */
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .modal-content {
-        max-width: 600px;
+        max-width: 540px;
         margin: 0 auto;
-        border-radius: var(--radius-xl);
+        border-radius: var(--md-radius-lg);
         top: 50%;
         transform: translateY(-50%) scale(0.9);
         bottom: auto;
@@ -148,5 +190,15 @@
     
     .modal.active .modal-content {
         transform: translateY(-50%) scale(1);
+    }
+}
+
+@media (min-width: 960px) {
+    .modal-content {
+        max-width: 640px;
+    }
+    
+    .modal-confirm .modal-content {
+        max-width: 400px;
     }
 }

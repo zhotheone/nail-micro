@@ -5,6 +5,7 @@ const Stats = {
     
     // Ініціалізація
     init() {
+        console.log('Ініціалізація модуля статистики');
         // Налаштування кнопок вибору періоду
         const periodButtons = document.querySelectorAll('.period-btn');
         periodButtons.forEach(button => {
@@ -19,33 +20,109 @@ const Stats = {
             });
         });
         
-        // Запуск завантаження статистики
-        this.loadStatistics();
+        // Запуск завантаження статистики при ініціалізації
+        setTimeout(() => {
+            this.loadStatistics();
+        }, 100);
     },
     
     // Завантаження та відображення статистики
     async loadStatistics() {
         try {
+            console.log('Завантаження статистики для періоду:', this.currentPeriod);
             // Показуємо лоадери
             this.showLoaders();
             
-            // Отримуємо дані статистики
-            const stats = await apiClient.getStats(this.currentPeriod);
-            const earningsData = await apiClient.getEarningsStats(this.currentPeriod);
-            const topClients = await apiClient.getTopClients(this.currentPeriod, 5);
-            const topProcedures = await apiClient.getTopProcedures(this.currentPeriod, 5);
-            const topDays = await apiClient.getTopDays(this.currentPeriod, 5);
+            // Паралельне завантаження всіх даних статистики
+            const [stats, earningsData, topClients, topProcedures, topDays] = await Promise.all([
+                this.fetchStats(),
+                this.fetchEarningsData(),
+                this.fetchTopClients(),
+                this.fetchTopProcedures(),
+                this.fetchTopDays()
+            ]);
             
             // Відображаємо дані
-            this.renderStats(stats);
-            this.renderEarningsChart(earningsData);
-            this.renderProceduresChart(topProcedures);
-            this.renderTopClients(topClients);
-            this.renderTopDays(topDays);
+            if (stats) this.renderStats(stats);
+            if (earningsData) this.renderEarningsChart(earningsData);
+            if (topProcedures) this.renderProceduresChart(topProcedures);
+            if (topClients) this.renderTopClients(topClients);
+            if (topDays) this.renderTopDays(topDays);
             
         } catch (error) {
             console.error('Помилка завантаження статистики:', error);
             Toast.error('Не вдалося завантажити статистику. Спробуйте пізніше.');
+        }
+    },
+    
+    // Завантаження загальної статистики
+    async fetchStats() {
+        try {
+            return await apiClient.getStats(this.currentPeriod);
+        } catch (error) {
+            console.error('Помилка завантаження загальної статистики:', error);
+            this.showErrorMessage('#total-earnings', 'Помилка завантаження');
+            this.showErrorMessage('#total-clients', 'Помилка завантаження');
+            this.showErrorMessage('#total-appointments', 'Помилка завантаження');
+            this.showErrorMessage('#avg-earning', 'Помилка завантаження');
+            return null;
+        }
+    },
+    
+    // Завантаження даних про доходи
+    async fetchEarningsData() {
+        try {
+            return await apiClient.getEarningsStats(this.currentPeriod);
+        } catch (error) {
+            console.error('Помилка завантаження даних про доходи:', error);
+            this.showErrorMessage('#earnings-chart', 'Не вдалося завантажити дані про доходи');
+            return null;
+        }
+    },
+    
+    // Завантаження даних про топ клієнтів
+    async fetchTopClients() {
+        try {
+            return await apiClient.getTopClients(this.currentPeriod, 5);
+        } catch (error) {
+            console.error('Помилка завантаження даних про топ клієнтів:', error);
+            this.showErrorMessage('#top-clients', 'Не вдалося завантажити дані про найкращих клієнтів');
+            return null;
+        }
+    },
+    
+    // Завантаження даних про топ процедури
+    async fetchTopProcedures() {
+        try {
+            return await apiClient.getTopProcedures(this.currentPeriod, 5);
+        } catch (error) {
+            console.error('Помилка завантаження даних про топ процедури:', error);
+            this.showErrorMessage('#procedures-chart', 'Не вдалося завантажити дані про найпопулярніші процедури');
+            return null;
+        }
+    },
+    
+    // Завантаження даних про найкращі дні
+    async fetchTopDays() {
+        try {
+            return await apiClient.getTopDays(this.currentPeriod, 5);
+        } catch (error) {
+            console.error('Помилка завантаження даних про найкращі дні:', error);
+            this.showErrorMessage('#top-days', 'Не вдалося завантажити дані про найкращі дні');
+            return null;
+        }
+    },
+    
+    // Відображення повідомлення про помилку
+    showErrorMessage(selector, message) {
+        const container = document.querySelector(selector);
+        if (container) {
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>${message}</p>
+                </div>
+            `;
         }
     },
     
@@ -85,8 +162,15 @@ const Stats = {
         if (!trend) return;
         
         const container = document.querySelector(`${selector} .stats-card-value`);
-        const trendElement = document.createElement('div');
+        if (!container) return;
         
+        // Видаляємо попередній індикатор тренду, якщо є
+        const existingTrend = container.querySelector('.stats-card-trend');
+        if (existingTrend) {
+            existingTrend.remove();
+        }
+        
+        const trendElement = document.createElement('div');
         trendElement.className = `stats-card-trend ${trend.direction === 'up' ? 'positive' : 'negative'}`;
         trendElement.innerHTML = `
             <i class="fas fa-${trend.direction === 'up' ? 'arrow-up' : 'arrow-down'}"></i>
@@ -98,10 +182,29 @@ const Stats = {
     
     // Графік доходів
     renderEarningsChart(data) {
-        const ctx = document.getElementById('earnings-chart');
+        const container = document.getElementById('earnings-chart');
         
-        if (!ctx) {
+        if (!container) {
             console.error('Елемент для графіка доходів не знайдено');
+            return;
+        }
+        
+        // Створюємо canvas для графіка, якщо його ще немає
+        let canvas = container.querySelector('canvas');
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            container.innerHTML = '';
+            container.appendChild(canvas);
+        }
+        
+        // Перевірка наявності даних
+        if (!data.labels || !data.earnings || data.labels.length === 0) {
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>Немає даних за вибраний період</p>
+                </div>
+            `;
             return;
         }
         
@@ -112,13 +215,11 @@ const Stats = {
         
         // Отримання змінних CSS
         const style = getComputedStyle(document.documentElement);
-        const primaryColor = style.getPropertyValue('--primary-color').trim() || '#ebbcba';
-        const foamColor = style.getPropertyValue('--foam').trim() || '#9ccfd8';
-        const baseColor = style.getPropertyValue('--base').trim() || '#191724';
-        const overlayColor = style.getPropertyValue('--overlay').trim() || '#26233a';
-        const borderColor = style.getPropertyValue('--border-color').trim() || '#6e6a86';
-        const textColor = style.getPropertyValue('--text').trim() || '#e0def4';
-        const subtleColor = style.getPropertyValue('--subtle').trim() || '#908caa';
+        const primaryColor = style.getPropertyValue('--md-primary').trim() || '#eb6f92';
+        const onBackgroundColor = style.getPropertyValue('--md-on-background').trim() || '#e0def4';
+        const backgroundColor = style.getPropertyValue('--md-background').trim() || '#191724';
+        const surfaceVariantColor = style.getPropertyValue('--md-surface-variant').trim() || '#26233a';
+        const textMediumColor = style.getPropertyValue('--md-text-medium').trim() || 'rgba(224, 222, 244, 0.7)';
         
         // Створення налаштувань графіка
         const chartConfig = {
@@ -129,11 +230,11 @@ const Stats = {
                     label: 'Доходи',
                     data: data.earnings,
                     borderColor: primaryColor,
-                    backgroundColor: 'rgba(235, 188, 186, 0.1)',
+                    backgroundColor: 'rgba(235, 111, 146, 0.1)',
                     tension: 0.4,
                     fill: true,
-                    pointBackgroundColor: foamColor,
-                    pointBorderColor: baseColor,
+                    pointBackgroundColor: primaryColor,
+                    pointBorderColor: backgroundColor,
                     pointBorderWidth: 2,
                     pointRadius: 4,
                     pointHoverRadius: 6
@@ -149,11 +250,13 @@ const Stats = {
                     tooltip: {
                         mode: 'index',
                         intersect: false,
-                        backgroundColor: overlayColor,
-                        titleColor: textColor,
-                        bodyColor: subtleColor,
-                        borderColor: borderColor,
-                        borderWidth: 1,
+                        backgroundColor: surfaceVariantColor,
+                        titleColor: onBackgroundColor,
+                        bodyColor: textMediumColor,
+                        borderWidth: 0,
+                        padding: 10,
+                        cornerRadius: 8,
+                        displayColors: false,
                         callbacks: {
                             label: function(context) {
                                 let label = context.dataset.label || '';
@@ -174,15 +277,20 @@ const Stats = {
                     y: {
                         beginAtZero: true,
                         grid: {
-                            color: 'rgba(110, 106, 134, 0.1)'
+                            color: 'rgba(224, 222, 244, 0.1)'
                         },
                         ticks: {
-                            color: subtleColor,
+                            color: textMediumColor,
+                            font: {
+                                family: "'Fira Code', monospace",
+                                size: 11
+                            },
                             callback: function(value) {
                                 return new Intl.NumberFormat('uk-UA', {
                                     style: 'currency',
                                     currency: 'UAH',
-                                    minimumFractionDigits: 0
+                                    minimumFractionDigits: 0,
+                                    notation: 'compact'
                                 }).format(value);
                             }
                         }
@@ -192,23 +300,57 @@ const Stats = {
                             display: false
                         },
                         ticks: {
-                            color: subtleColor
+                            color: textMediumColor,
+                            font: {
+                                family: "'Fira Code', monospace",
+                                size: 11
+                            }
                         }
                     }
                 }
             }
         };
         
-        // Створення графіка
-        this.charts.earnings = new Chart(ctx, chartConfig);
+        // Переконуємося, що Chart.js доступний
+        if (typeof Chart !== 'undefined') {
+            // Створення графіка
+            this.charts.earnings = new Chart(canvas, chartConfig);
+        } else {
+            console.error('Chart.js не знайдено');
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Не вдалося ініціалізувати графік. Chart.js не знайдено.</p>
+                </div>
+            `;
+        }
     },
     
     // Графік популярних процедур
     renderProceduresChart(data) {
-        const ctx = document.getElementById('procedures-chart');
+        const container = document.getElementById('procedures-chart');
         
-        if (!ctx) {
+        if (!container) {
             console.error('Елемент для графіка процедур не знайдено');
+            return;
+        }
+        
+        // Створюємо canvas для графіка, якщо його ще немає
+        let canvas = container.querySelector('canvas');
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            container.innerHTML = '';
+            container.appendChild(canvas);
+        }
+        
+        // Переконуємося, що у нас є дані
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>Немає даних про процедури за вибраний період</p>
+                </div>
+            `;
             return;
         }
         
@@ -219,26 +361,23 @@ const Stats = {
         
         // Отримання змінних CSS
         const style = getComputedStyle(document.documentElement);
-        const primaryColor = style.getPropertyValue('--primary-color').trim() || '#ebbcba';
+        const primaryColor = style.getPropertyValue('--md-primary').trim() || '#eb6f92';
+        const secondaryColor = style.getPropertyValue('--md-secondary').trim() || '#9ccfd8';
+        const secondaryDarkColor = style.getPropertyValue('--md-secondary-dark').trim() || '#31748f';
+        const warningColor = style.getPropertyValue('--md-warning').trim() || '#f6c177';
         const irisColor = style.getPropertyValue('--iris').trim() || '#c4a7e7';
-        const pineColor = style.getPropertyValue('--pine').trim() || '#31748f';
-        const foamColor = style.getPropertyValue('--foam').trim() || '#9ccfd8';
-        const goldColor = style.getPropertyValue('--gold').trim() || '#f6c177';
+        const backgroundColor = style.getPropertyValue('--md-background').trim() || '#191724';
+        const textMediumColor = style.getPropertyValue('--md-text-medium').trim() || 'rgba(224, 222, 244, 0.7)';
+        const onBackgroundColor = style.getPropertyValue('--md-on-background').trim() || '#e0def4';
         
         // Кольори для графіка
         const colors = [
             primaryColor,
-            irisColor,
-            pineColor,
-            foamColor,
-            goldColor
+            secondaryColor,
+            secondaryDarkColor,
+            warningColor,
+            irisColor
         ];
-        
-        // Переконуємося, що у нас є дані
-        if (!data || data.length === 0) {
-            ctx.innerHTML = '<div class="empty-state">Немає даних про процедури за вибраний період</div>';
-            return;
-        }
         
         // Налаштування графіка
         const chartConfig = {
@@ -248,7 +387,7 @@ const Stats = {
                 datasets: [{
                     data: data.map(item => item.count),
                     backgroundColor: colors,
-                    borderColor: style.getPropertyValue('--base').trim() || '#191724',
+                    borderColor: backgroundColor,
                     borderWidth: 2,
                     hoverOffset: 10
                 }]
@@ -256,11 +395,12 @@ const Stats = {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '65%',
                 plugins: {
                     legend: {
                         position: 'right',
                         labels: {
-                            color: style.getPropertyValue('--text').trim() || '#e0def4',
+                            color: onBackgroundColor,
                             padding: 15,
                             font: {
                                 family: "'Fira Code', monospace",
@@ -283,11 +423,13 @@ const Stats = {
                         }
                     },
                     tooltip: {
-                        backgroundColor: style.getPropertyValue('--overlay').trim() || '#26233a',
-                        titleColor: style.getPropertyValue('--text').trim() || '#e0def4',
-                        bodyColor: style.getPropertyValue('--subtle').trim() || '#908caa',
-                        borderColor: style.getPropertyValue('--border-color').trim() || '#6e6a86',
-                        borderWidth: 1,
+                        backgroundColor: surfaceVariantColor,
+                        titleColor: onBackgroundColor,
+                        bodyColor: textMediumColor,
+                        borderWidth: 0,
+                        padding: 10,
+                        cornerRadius: 8,
+                        displayColors: false,
                         callbacks: {
                             label: function(context) {
                                 const label = context.label || '';
@@ -302,8 +444,19 @@ const Stats = {
             }
         };
         
-        // Створення графіка
-        this.charts.procedures = new Chart(ctx, chartConfig);
+        // Переконуємося, що Chart.js доступний
+        if (typeof Chart !== 'undefined') {
+            // Створення графіка
+            this.charts.procedures = new Chart(canvas, chartConfig);
+        } else {
+            console.error('Chart.js не знайдено');
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Не вдалося ініціалізувати графік. Chart.js не знайдено.</p>
+                </div>
+            `;
+        }
     },
     
     // Таблиця топ-клієнтів
@@ -316,7 +469,12 @@ const Stats = {
         }
         
         if (!clients || clients.length === 0) {
-            container.innerHTML = '<div class="empty-state">Немає даних про клієнтів за вибраний період</div>';
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-users"></i>
+                    <p>Немає даних про клієнтів за вибраний період</p>
+                </div>
+            `;
             return;
         }
         
@@ -369,7 +527,12 @@ const Stats = {
         }
         
         if (!days || days.length === 0) {
-            container.innerHTML = '<div class="empty-state">Немає даних про дні за вибраний період</div>';
+            container.innerHTML = `
+                <div class="stats-empty-state">
+                    <i class="fas fa-calendar-day"></i>
+                    <p>Немає даних про дні за вибраний період</p>
+                </div>
+            `;
             return;
         }
         
@@ -440,11 +603,7 @@ const Stats = {
                     this.charts[id.split('-')[0]] = null;
                 }
                 // Показуємо лоадер
-                const container = document.createElement('div');
-                container.className = 'loading-container';
-                container.innerHTML = loaderHTML + '<p>Завантаження даних...</p>';
-                element.innerHTML = '';
-                element.appendChild(container);
+                element.innerHTML = `<div class="loading-container">${loaderHTML}<p>Завантаження даних...</p></div>`;
             }
         });
         
@@ -452,22 +611,61 @@ const Stats = {
         const tableContainers = ['top-clients', 'top-days'];
         tableContainers.forEach(id => {
             const element = document.getElementById(id);
-            if (element) element.innerHTML = loaderHTML;
+            if (element) element.innerHTML = `<div class="loading-container">${loaderHTML}</div>`;
         });
     }
 };
+
+// Глобальна змінна для доступу до Chart.js
+let Chart;
 
 // Ініціалізація при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', () => {
     // Перевіряємо, чи відкрита вкладка статистики
     if (document.getElementById('stats-tab') && document.getElementById('stats-tab').classList.contains('active')) {
-        Stats.init();
+        // Перевіряємо наявність Chart.js
+        if (window.Chart) {
+            Chart = window.Chart;
+            Stats.init();
+        } else {
+            console.error('Chart.js не знайдено. Завантажуємо Chart.js динамічно');
+            // Динамічне завантаження Chart.js
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+            script.onload = () => {
+                Chart = window.Chart;
+                Stats.init();
+            };
+            script.onerror = () => {
+                console.error('Помилка завантаження Chart.js');
+                Toast.error('Не вдалося завантажити необхідні бібліотеки для статистики');
+            };
+            document.head.appendChild(script);
+        }
     }
 });
 
 // Обробник події зміни вкладки
 document.addEventListener('tabChange', (e) => {
     if (e.detail.tabId === 'stats') {
-        Stats.init();
+        // Перевіряємо наявність Chart.js
+        if (window.Chart) {
+            Chart = window.Chart;
+            Stats.init();
+        } else {
+            console.error('Chart.js не знайдено. Завантажуємо Chart.js динамічно');
+            // Динамічне завантаження Chart.js
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js';
+            script.onload = () => {
+                Chart = window.Chart;
+                Stats.init();
+            };
+            script.onerror = () => {
+                console.error('Помилка завантаження Chart.js');
+                Toast.error('Не вдалося завантажити необхідні бібліотеки для статистики');
+            };
+            document.head.appendChild(script);
+        }
     }
 });

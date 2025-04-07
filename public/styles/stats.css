@@ -1,58 +1,70 @@
-/* Стилі для статистики */
+/* Статистика в стилі Material Design */
 .stats-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--md-spacing-lg);
     flex-wrap: wrap;
-    gap: var(--spacing-md);
+    gap: var(--md-spacing-md);
 }
 
 .stats-header h2 {
-    color: var(--primary-color);
-    font-size: 1.5rem;
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-headline);
+    font-weight: 500;
+    margin: 0;
 }
 
 .period-selector {
     display: flex;
-    background-color: var(--light-bg);
-    border-radius: var(--radius-md);
+    background-color: var(--md-surface-variant);
+    border-radius: var(--md-radius-lg);
     overflow: hidden;
+    box-shadow: var(--md-elevation-1);
 }
 
 .period-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 10px 16px;
     background: none;
     border: none;
-    color: var(--subtle);
+    color: var(--md-text-medium);
     cursor: pointer;
-    transition: all var(--transition-normal);
+    transition: all var(--md-transition-standard);
+    font-size: var(--md-font-size-body);
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.period-btn:hover, .period-btn:focus {
+    color: var(--md-text-high);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .period-btn.active {
-    background-color: var(--primary-color);
-    color: var(--base);
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
 }
 
 /* Картки статистики */
 .stats-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--md-spacing-md);
+    margin-bottom: var(--md-spacing-lg);
 }
 
 .stats-card {
-    background-color: var(--surface);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-lg);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-normal);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
     position: relative;
     overflow: hidden;
-    min-height: 120px;
+    min-height: 140px;
 }
 
 .stats-card::before {
@@ -62,71 +74,86 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background-color: var(--primary-color);
+    background-color: var(--md-primary);
 }
 
 .stats-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-3);
 }
 
 .stats-card-title {
-    font-size: 0.9rem;
-    color: var(--subtle);
-    margin-bottom: var(--spacing-sm);
+    font-size: var(--md-font-size-body);
+    color: var(--md-text-medium);
+    margin-bottom: var(--md-spacing-sm);
+    font-weight: 500;
 }
 
 .stats-card-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--text);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--md-text-high);
     margin-top: auto;
+}
+
+.stats-card-value small {
+    font-size: var(--md-font-size-small);
+    opacity: 0.8;
+    margin-left: 4px;
 }
 
 .stats-card-trend {
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
-    margin-top: var(--spacing-xs);
+    font-size: var(--md-font-size-small);
+    margin-top: var(--md-spacing-xs);
+    font-weight: 500;
 }
 
 .stats-card-trend.positive {
-    color: var(--success-color);
+    color: var(--md-success);
 }
 
 .stats-card-trend.negative {
-    color: var(--danger-color);
+    color: var(--md-error);
 }
 
 .stats-card-trend i {
-    margin-right: var(--spacing-xs);
+    margin-right: var(--md-spacing-xs);
+    font-size: 14px;
 }
 
 /* Графіки */
 .stats-charts {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    gap: var(--md-spacing-lg);
+    margin-bottom: var(--md-spacing-lg);
 }
 
 .stats-chart-container {
-    background-color: var(--surface);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    box-shadow: var(--shadow-sm);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-lg);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
+}
+
+.stats-chart-container:hover {
+    box-shadow: var(--md-elevation-2);
 }
 
 .stats-chart-container h3 {
-    color: var(--foam);
-    font-size: 1.1rem;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-title);
+    margin-bottom: var(--md-spacing-lg);
+    font-weight: 500;
+    padding-bottom: var(--md-spacing-sm);
+    border-bottom: 1px solid rgba(224, 222, 244, 0.1);
 }
 
 .stats-chart {
-    height: 300px;
+    height: 320px;
     width: 100%;
     position: relative;
 }
@@ -135,23 +162,29 @@
 .stats-tables {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    gap: var(--md-spacing-lg);
+    margin-bottom: var(--md-spacing-lg);
 }
 
 .stats-table-container {
-    background-color: var(--surface);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    box-shadow: var(--shadow-sm);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-lg);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
+}
+
+.stats-table-container:hover {
+    box-shadow: var(--md-elevation-2);
 }
 
 .stats-table-container h3 {
-    color: var(--foam);
-    font-size: 1.1rem;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-title);
+    margin-bottom: var(--md-spacing-md);
+    font-weight: 500;
+    padding-bottom: var(--md-spacing-sm);
+    border-bottom: 1px solid rgba(224, 222, 244, 0.1);
 }
 
 .stats-table {
@@ -161,14 +194,17 @@
 
 .stats-table th,
 .stats-table td {
-    padding: var(--spacing-sm);
+    padding: var(--md-spacing-sm);
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(224, 222, 244, 0.05);
 }
 
 .stats-table th {
-    color: var(--subtle);
-    font-weight: normal;
+    color: var(--md-text-medium);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: var(--md-font-size-small);
+    letter-spacing: 0.5px;
 }
 
 .stats-table tr:last-child td {
@@ -176,7 +212,25 @@
 }
 
 .stats-table tr:hover td {
-    background-color: var(--overlay);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Пустий стан для статистики */
+.stats-empty-state {
+    text-align: center;
+    padding: var(--md-spacing-xl);
+    color: var(--md-text-medium);
+}
+
+.stats-empty-state i {
+    font-size: 48px;
+    margin-bottom: var(--md-spacing-md);
+    opacity: 0.5;
+}
+
+.stats-empty-state h3 {
+    margin-bottom: var(--md-spacing-sm);
+    color: var(--md-text-high);
 }
 
 /* Адаптивність */
@@ -190,18 +244,31 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .stats-header {
         flex-direction: column;
         align-items: flex-start;
     }
     
+    .period-selector {
+        width: 100%;
+    }
+    
+    .period-btn {
+        flex: 1;
+        text-align: center;
+    }
+    
     .stats-cards {
         grid-template-columns: 1fr;
+    }
+    
+    .stats-chart {
+        height: 280px;
     }
 }
 
 /* Доповнення до графіків Chart.js */
 canvas {
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+    border-radius: var(--md-radius-md);
 }

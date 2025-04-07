@@ -11,6 +11,9 @@ const Router = {
                 e.preventDefault();
                 const tabId = button.getAttribute('data-tab');
                 this.navigateTo(tabId);
+                
+                // Додаємо ефект брижів при кліку (ripple effect)
+                this.addRippleEffect(button, e);
             });
         });
         
@@ -54,8 +57,16 @@ const Router = {
         });
         
         // Показати вибрану вкладку і встановити активний клас для кнопки
-        document.getElementById(`${tabId}-tab`).classList.add('active');
-        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+        const tabContent = document.getElementById(`${tabId}-tab`);
+        const tabButton = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+        
+        if (tabContent) {
+            tabContent.classList.add('active');
+        }
+        
+        if (tabButton) {
+            tabButton.classList.add('active');
+        }
         
         // Оновлення стану додатка
         appState.currentTab = tabId;
@@ -70,6 +81,12 @@ const Router = {
         
         // Скрол до верху вкладки
         window.scrollTo(0, 0);
+        
+        // Створюємо і диспетчеризуємо власну подію зміни вкладки
+        const tabChangeEvent = new CustomEvent('tabChange', {
+            detail: { tabId }
+        });
+        document.dispatchEvent(tabChangeEvent);
     },
     
     // Завантаження даних для вибраної вкладки
@@ -86,9 +103,25 @@ const Router = {
                 Procedures.loadProcedures();
                 break;
             case 'stats':
-                Stats.init();
-                Stats.loadStatistics();
+                // Тепер ініціалізація статистики відбувається через обробник події tabChange
                 break;
         }
+    },
+    
+    // Додавання ефекту брижів при кліку (ripple effect)
+    addRippleEffect(button, event) {
+        const x = event.clientX - button.getBoundingClientRect().left;
+        const y = event.clientY - button.getBoundingClientRect().top;
+        
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
     }
 };

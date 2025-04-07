@@ -1,39 +1,46 @@
-/* Головна навігація */
+/* Навігація в стилі Material Design */
 .main-nav {
     display: flex;
     justify-content: space-around;
-    background-color: var(--surface);
+    background-color: var(--md-surface);
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    border-top: 1px solid var(--border-color);
-    z-index: var(--z-above);
-    padding: 8px 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: var(--md-z-navbar);
+    height: 64px;
+    box-shadow: var(--md-elevation-2);
+    transition: all var(--md-transition-standard);
 }
 
 .tab-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
-    color: var(--muted);
-    font-size: 12px;
-    padding: var(--spacing-sm);
+    color: var(--md-text-medium);
+    font-size: var(--md-font-size-small);
     flex: 1;
-    transition: color var(--transition-normal);
+    transition: all var(--md-transition-standard);
     position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .tab-btn i {
-    font-size: 20px;
-    margin-bottom: var(--spacing-xs);
-    transition: transform var(--transition-normal);
+    font-size: 24px;
+    margin-bottom: 4px;
+    transition: transform var(--md-transition-standard);
+}
+
+.tab-btn:hover, .tab-btn:focus {
+    color: var(--md-text-high);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .tab-btn.active {
-    color: var(--primary-color);
+    color: var(--md-primary);
 }
 
 .tab-btn.active i {
@@ -45,70 +52,79 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
     width: 0;
-    height: 2px;
-    background-color: var(--primary-color);
-    transition: width var(--transition-normal);
+    height: 3px;
+    background-color: var(--md-primary);
+    transition: all var(--md-transition-standard);
+    transform: translateX(-50%);
 }
 
 .tab-btn.active::after {
-    width: 50%;
+    width: 32px;
 }
 
-.tab-btn:hover {
-    color: var(--rose);
+/* Ripple effect for tab buttons */
+.tab-btn .ripple {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
 }
 
 /* Адаптивність навігації */
-@media (min-width: 768px) {
+@media (min-width: 600px) {
     .main-nav {
-        max-width: 500px;
+        max-width: 480px;
         left: 50%;
         transform: translateX(-50%);
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        bottom: var(--spacing-md);
-    }
-    
-    .tab-btn i {
-        font-size: 22px;
+        border-radius: var(--md-radius-lg) var(--md-radius-lg) 0 0;
+        bottom: var(--md-spacing-md);
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
     .main-nav {
         position: fixed;
         bottom: auto;
-        top: var(--spacing-md);
-        padding: var(--spacing-sm);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-color);
-        width: 70px;
-        max-width: 70px;
+        top: var(--md-spacing-lg);
+        left: var(--md-spacing-lg);
+        transform: none;
+        width: 72px;
+        max-width: 72px;
         flex-direction: column;
         height: auto;
-        left: var(--spacing-md);
-        transform: none;
+        border-radius: var(--md-radius-lg);
     }
     
     .tab-btn {
-        margin-bottom: var(--spacing-md);
+        padding: var(--md-spacing-sm) 0;
+        height: 72px;
     }
     
     .tab-btn::after {
         left: 0;
         bottom: 50%;
-        transform: translateY(50%);
-        width: 2px;
+        width: 3px;
         height: 0;
+        transform: translateY(50%);
     }
     
     .tab-btn.active::after {
-        width: 2px;
-        height: 50%;
+        width: 3px;
+        height: 32px;
     }
     
     .content {
         margin-left: 90px;
+        margin-bottom: 0;
     }
 }

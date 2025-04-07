@@ -407,6 +407,60 @@ app.get('/api/appointments/client/:clientId', async (req, res) => {
     }
 });
 
+app.get('/api/appointments/date/:date', async (req, res) => {
+    try {
+        const dateStart = new Date(req.params.date);
+        dateStart.setHours(0, 0, 0, 0);
+        
+        const dateEnd = new Date(req.params.date);
+        dateEnd.setHours(23, 59, 59, 999);
+        
+        console.log(`Запит записів на дату: ${req.params.date}`);
+        console.log(`Діапазон: ${dateStart.toISOString()} - ${dateEnd.toISOString()}`);
+        
+        const appointments = await Appointment.find({
+            time: { $gte: dateStart, $lte: dateEnd }
+        })
+            .populate('clientId')
+            .populate('procedureId')
+            .sort({ time: 1 });
+        
+        console.log(`Знайдено записів: ${appointments.length}`);
+        res.json(appointments);
+    } catch (err) {
+        console.error('Помилка отримання записів на дату:', err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Пошук записів за днем та місяцем (незалежно від року)
+app.get('/api/appointments/search', async (req, res) => {
+    try {
+        const { day, month } = req.query;
+        
+        if (!day || !month) {
+            return res.status(400).json({ message: 'Потрібно вказати день та місяць для пошуку' });
+        }
+        
+        const appointments = await Appointment.find()
+            .populate('clientId')
+            .populate('procedureId')
+            .sort({ time: 1 });
+        
+        // Фільтруємо записи за днем та місяцем, незалежно від року
+        const filteredAppointments = appointments.filter(appointment => {
+            const date = new Date(appointment.time);
+            return date.getDate() === parseInt(day) && date.getMonth() === parseInt(month) - 1;
+        });
+        
+        console.log(`Знайдено записів за день ${day} та місяць ${month}: ${filteredAppointments.length}`);
+        res.json(filteredAppointments);
+    } catch (err) {
+        console.error('Помилка пошуку записів за днем та місяцем:', err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // Підключення маршрутів статистики
 const statsRoutes = require('./routes/stats');
 app.use('/api/stats', statsRoutes);

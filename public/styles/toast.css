@@ -1,29 +1,33 @@
-/* Стилі для сповіщень (тости) */
+/* Сповіщення (toast) в стилі Material Design */
 #toast-container {
     position: fixed;
-    bottom: 70px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
     max-width: 400px;
-    z-index: var(--z-toast);
+    z-index: var(--md-z-toast);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--md-spacing-sm);
+    pointer-events: none;
 }
 
 .toast {
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    margin: 0 auto;
-    box-shadow: var(--shadow-md);
-    color: var(--text);
+    border-radius: var(--md-radius-md);
+    padding: var(--md-spacing-md);
+    box-shadow: var(--md-elevation-3);
+    color: var(--md-on-surface);
     width: 100%;
     display: flex;
     align-items: center;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    transition: all var(--md-transition-standard);
+    background-color: var(--md-surface);
+    pointer-events: auto;
+    overflow: hidden;
+    position: relative;
 }
 
 .toast.show {
@@ -32,53 +36,78 @@
 }
 
 .toast-icon {
-    margin-right: var(--spacing-md);
+    margin-right: var(--md-spacing-md);
     font-size: 20px;
     flex-shrink: 0;
 }
 
 .toast-content {
     flex-grow: 1;
+    padding-right: var(--md-spacing-md);
 }
 
 .toast-title {
-    font-weight: bold;
-    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: var(--md-font-size-subtitle);
 }
 
 .toast-message {
-    font-size: 14px;
+    font-size: var(--md-font-size-body);
+    opacity: 0.9;
 }
 
 .toast-close {
-    margin-left: var(--spacing-md);
+    margin-left: auto;
     cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--md-text-medium);
     font-size: 16px;
-    opacity: 0.7;
-    transition: opacity var(--transition-fast);
+    transition: all var(--md-transition-standard);
 }
 
-.toast-close:hover {
-    opacity: 1;
+.toast-close:hover, .toast-close:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--md-text-high);
 }
 
 /* Типи тостів */
 .toast-success {
-    background-color: var(--success-color);
+    border-left: 3px solid var(--md-success);
+}
+
+.toast-success .toast-icon {
+    color: var(--md-success);
 }
 
 .toast-error {
-    background-color: var(--danger-color);
+    border-left: 3px solid var(--md-error);
+}
+
+.toast-error .toast-icon {
+    color: var(--md-error);
 }
 
 .toast-warning {
-    background-color: var(--warning-color);
-    color: var(--base);
+    border-left: 3px solid var(--md-warning);
+}
+
+.toast-warning .toast-icon {
+    color: var(--md-warning);
 }
 
 .toast-info {
-    background-color: var(--info-color);
-    color: var(--base);
+    border-left: 3px solid var(--md-info);
+}
+
+.toast-info .toast-icon {
+    color: var(--md-info);
 }
 
 /* Анімація для авто-закриття */
@@ -97,9 +126,58 @@
     left: 0;
     height: 3px;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.toast-success .toast-progress {
+    background-color: var(--md-success);
+}
+
+.toast-error .toast-progress {
+    background-color: var(--md-error);
+}
+
+.toast-warning .toast-progress {
+    background-color: var(--md-warning);
+}
+
+.toast-info .toast-progress {
+    background-color: var(--md-info);
 }
 
 .toast-progress.active {
     animation: toast-progress 3s linear forwards;
+}
+
+/* Адаптивність для тостів */
+@media (max-width: 480px) {
+    #toast-container {
+        bottom: 70px;
+        max-width: 90%;
+    }
+    
+    .toast {
+        padding: var(--md-spacing-sm);
+    }
+    
+    .toast-icon {
+        font-size: 18px;
+        margin-right: var(--md-spacing-sm);
+    }
+    
+    .toast-title {
+        font-size: 14px;
+    }
+    
+    .toast-message {
+        font-size: 13px;
+    }
+}
+
+@media (min-width: 960px) {
+    #toast-container {
+        bottom: 32px;
+        right: 32px;
+        left: auto;
+        transform: none;
+    }
 }

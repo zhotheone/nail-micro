@@ -63,29 +63,45 @@ const Forms = {
                 this.setFormLoading(form, true);
                 
                 // Отримання даних форми безпосередньо з елементів
-                const clientId = form.querySelector('[name="clientId"]').value;
-                const procedureId = form.querySelector('[name="procedureId"]').value;
-                const dateValue = form.querySelector('[name="date"]').value;
-                const timeValue = form.querySelector('[name="time"]').value;
+                const appointmentId = form.querySelector('[name="id"]').value;
+                let clientId = form.querySelector('[name="clientId"]').value;
+                let procedureId = form.querySelector('[name="procedureId"]').value;
+                const dateStr = form.querySelector('[name="date"]').value;
+                const timeStr = form.querySelector('[name="time"]').value;
                 const price = parseFloat(form.querySelector('[name="price"]').value);
+                const finalPrice = parseFloat(form.querySelector('[name="finalPrice"]').value);
                 const status = form.querySelector('[name="status"]').value;
                 const notes = form.querySelector('[name="notes"]').value;
                 
-                if (!clientId || !procedureId || !dateValue || !timeValue) {
+                // Перевірка пошкоджених посилань і видалення тимчасових опцій
+                if (clientId === 'broken') {
+                    Toast.error('Будь ласка, виберіть дійсного клієнта для продовження.');
+                    this.setFormLoading(form, false);
+                    return;
+                }
+                
+                if (procedureId === 'broken') {
+                    Toast.error('Будь ласка, виберіть дійсну процедуру для продовження.');
+                    this.setFormLoading(form, false);
+                    return;
+                }
+                
+                // Перевірка обов'язкових полів
+                if (!clientId || !procedureId || !dateStr || !timeStr) {
                     Toast.error('Будь ласка, заповніть всі обов\'язкові поля для запису.');
                     this.setFormLoading(form, false);
                     return;
                 }
                 
                 // Перевірка числових значень
-                if (isNaN(price)) {
-                    Toast.error('Будь ласка, вкажіть коректну ціну.');
+                if (isNaN(price) || isNaN(finalPrice)) {
+                    Toast.error('Будь ласка, вкажіть коректні значення для цін.');
                     this.setFormLoading(form, false);
                     return;
                 }
                 
                 // Створення об'єкта дати та часу
-                const dateTime = new Date(`${dateValue}T${timeValue}`);
+                const dateTime = new Date(`${dateStr}T${timeStr}`);
                 
                 if (isNaN(dateTime.getTime())) {
                     Toast.error('Невірний формат дати або часу.');
@@ -99,32 +115,43 @@ const Forms = {
                     procedureId,
                     time: dateTime.toISOString(),
                     price,
+                    finalPrice,
                     status,
                     notes
                 };
                 
-                console.log('Дані запису для створення:', appointmentData);
+                console.log('Дані запису для оновлення:', appointmentData);
                 
-                // Відправка запису через API
-                const newAppointment = await apiClient.createAppointment(appointmentData);
-                
-                // Успішне створення
-                Toast.success('Запис успішно створено.');
-                
-                // Закриття модального вікна
-                Modals.close('booking-modal');
-                
-                // Оновлення списку записів, якщо дата співпадає
-                const appointmentDate = new Date(newAppointment.time);
-                if (this.isSameDay(appointmentDate, window.appState.selectedDate)) {
+                try {
+                    // Відправка запису через API
+                    await apiClient.updateAppointment(appointmentId, appointmentData);
+                    
+                    // Успішне оновлення
+                    Toast.success('Запис успішно оновлено.');
+                    
+                    // Закриття модального вікна
+                    Modals.close('edit-appointment-modal');
+                    
+                    // Оновлення списку записів
                     Appointments.loadAppointmentsForSelectedDate();
+                } catch (apiError) {
+                    // Специфічна обробка помилок API
+                    console.error('Помилка API при оновленні запису:', apiError);
+                    
+                    if (apiError.message && apiError.message.includes('Клієнт не знайдений')) {
+                        Toast.error('Вибраний клієнт не існує в базі даних. Перевірте дані.');
+                    } else if (apiError.message && apiError.message.includes('Процедура не знайдена')) {
+                        Toast.error('Вибрана процедура не існує в базі даних. Перевірте дані.');
+                    } else {
+                        Toast.error('Не вдалося оновити запис: ' + apiError.message);
+                    }
                 }
                 
                 // Розблокування форми
                 this.setFormLoading(form, false);
             } catch (error) {
-                console.error('Помилка створення запису:', error);
-                Toast.error('Не вдалося створити запис. ' + error.message);
+                console.error('Помилка оновлення запису:', error);
+                Toast.error('Не вдалося оновити запис: ' + error.message);
                 this.setFormLoading(form, false);
             }
         });

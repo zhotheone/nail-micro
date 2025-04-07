@@ -1,15 +1,19 @@
-/* Базовий стиль і компоновка */
+/* Базовий стиль і компоновка згідно Material Design */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Fira Code', monospace;
+    font-family: var(--md-font-family);
 }
 
 body {
-    background-color: var(--base);
-    color: var(--text);
+    background-color: var(--md-background);
+    color: var(--md-on-background);
     min-height: 100vh;
+    font-size: var(--md-font-size-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -23,112 +27,130 @@ body {
 
 /* Основний вміст */
 .content {
-    padding: var(--spacing-md);
-    margin-bottom: 60px; /* Для навігаційного меню внизу */
+    padding: var(--md-spacing-md);
+    margin-bottom: 72px; /* Для навігаційного меню внизу */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+    transition: padding var(--md-transition-standard);
 }
 
 /* Відображення вкладок */
 .tab-content {
     display: none;
+    opacity: 0;
+    transition: opacity var(--md-transition-standard);
+    animation: fadeIn var(--md-transition-standard);
 }
 
 .tab-content.active {
     display: block;
+    opacity: 1;
 }
 
-/* Плаваюча кнопка додавання */
+/* Матеріальна кнопка дії (FAB) */
 .fab {
     position: fixed;
-    bottom: 70px;
-    right: 20px;
+    bottom: 80px;
+    right: 24px;
     width: 56px;
     height: 56px;
-    border-radius: var(--radius-circle);
-    background-color: var(--primary-color);
+    border-radius: var(--md-radius-circle);
+    background-color: var(--md-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--base);
+    color: var(--md-on-primary);
     font-size: 24px;
-    box-shadow: var(--shadow-md);
-    z-index: var(--z-above);
+    box-shadow: var(--md-elevation-3);
+    z-index: var(--md-z-navbar);
     cursor: pointer;
-    transition: transform var(--transition-normal), background-color var(--transition-normal);
+    transition: all var(--md-transition-standard);
+    border: none;
+    transform: scale(1);
 }
 
-.fab:hover {
-    transform: scale(1.1);
-    background-color: var(--accent-color);
+.fab:hover, .fab:focus {
+    box-shadow: var(--md-elevation-4);
+    background-color: var(--md-primary-dark);
+    transform: scale(1.05);
 }
 
 .fab:active {
     transform: scale(0.95);
+    box-shadow: var(--md-elevation-2);
 }
 
 /* Анімації */
 @keyframes fadeIn {
     from {
         opacity: 0;
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
 .fade-in {
-    animation: fadeIn var(--transition-normal);
+    animation: fadeIn var(--md-transition-standard);
 }
 
 /* Порожній стан */
 .empty-state {
     text-align: center;
-    padding: var(--spacing-xl) var(--spacing-md);
-    color: var(--muted);
+    padding: var(--md-spacing-xl) var(--md-spacing-md);
+    color: var(--md-text-medium);
+    margin: var(--md-spacing-lg) auto;
+    max-width: 400px;
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    box-shadow: var(--md-elevation-1);
 }
 
 .empty-state i {
     font-size: 48px;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-md);
     display: block;
+    color: var(--md-text-disabled);
 }
 
 .empty-state h3 {
-    margin-bottom: var(--spacing-sm);
-    color: var(--foam);
+    margin-bottom: var(--md-spacing-sm);
+    color: var(--md-text-high);
+    font-weight: 500;
 }
 
 .empty-state p {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-md);
+    font-size: var(--md-font-size-body);
 }
 
-/* Лоадер */
+/* Матеріальний лоадер (кругова індикація) */
 .loader {
-    width: 30px;
-    height: 30px;
-    border: 3px solid var(--muted);
-    border-bottom-color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--md-surface-variant);
     border-radius: 50%;
+    border-top-color: var(--md-primary);
     display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    margin: var(--spacing-md) auto;
+    margin: var(--md-spacing-md) auto;
+    animation: loader-spin 1s linear infinite;
+    position: relative;
 }
 
 .btn-loader {
     width: 20px;
     height: 20px;
-    border: 2px solid var(--base);
-    border-bottom-color: transparent;
+    border: 2px solid var(--md-on-primary);
     border-radius: 50%;
+    border-top-color: transparent;
     display: none;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+    animation: loader-spin 1s linear infinite;
 }
 
-@keyframes rotation {
+@keyframes loader-spin {
     0% {
         transform: rotate(0deg);
     }
@@ -151,25 +173,40 @@ button.loading .btn-loader {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl);
+    padding: var(--md-spacing-xl);
     text-align: center;
 }
 
 .loading-container p {
-    margin-top: var(--spacing-md);
-    color: var(--muted);
+    margin-top: var(--md-spacing-md);
+    color: var(--md-text-medium);
 }
 
 /* Адаптивність */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .content {
-        padding: var(--spacing-sm);
+        padding: var(--md-spacing-sm);
+    }
+    
+    .fab {
+        bottom: 72px;
+        right: 16px;
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 600px) and (max-width: 960px) {
+    .content {
+        padding: var(--md-spacing-md);
+    }
+}
+
+@media (min-width: 960px) {
     .container {
-        padding-left: var(--spacing-md);
-        padding-right: var(--spacing-md);
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .content {
+        padding: var(--md-spacing-lg);
     }
 }

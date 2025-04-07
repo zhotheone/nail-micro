@@ -1,42 +1,54 @@
-/* Стилі для сторінки клієнтів */
+/* Стилі для клієнтів в стилі Material Design */
 .clients-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-lg);
 }
 
 .clients-header h2 {
-    color: var(--foam);
-    font-size: 1.5rem;
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-headline);
+    font-weight: 500;
+    margin: 0;
 }
 
 /* Пошук клієнтів */
 .search-container {
     position: sticky;
     top: 0;
-    z-index: 1;
-    padding: var(--spacing-sm) 0;
-    background-color: var(--base);
-    margin-bottom: var(--spacing-md);
+    z-index: 10;
+    padding: var(--md-spacing-sm) 0;
+    background-color: var(--md-background);
+    margin-bottom: var(--md-spacing-md);
+    transition: all var(--md-transition-standard);
+}
+
+.search-container.scrolled {
+    box-shadow: var(--md-elevation-2);
+    padding: var(--md-spacing-sm);
+    margin: 0 -16px var(--md-spacing-md);
+    background-color: var(--md-surface);
 }
 
 #client-search {
-    background-color: var(--overlay);
-    padding-left: 35px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236e6a86' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E");
+    background-color: var(--md-surface-variant);
+    padding-left: 48px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23908caa' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: 10px center;
+    background-position: 16px center;
+    border-radius: var(--md-radius-lg);
+    height: 48px;
 }
 
-/* Картка клієнта */
+/* Картка клієнта в стилі Material Design */
 .client-card {
-    background-color: var(--surface);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-lg);
+    margin-bottom: var(--md-spacing-md);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
     position: relative;
     overflow: hidden;
 }
@@ -48,49 +60,51 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background-color: var(--primary-color);
+    background-color: var(--md-primary);
 }
 
 .client-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-3);
 }
 
 .client-info {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--md-spacing-md);
 }
 
 .client-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--foam);
-    margin-bottom: var(--spacing-xs);
+    font-size: var(--md-font-size-title);
+    font-weight: 500;
+    color: var(--md-text-high);
+    margin-bottom: var(--md-spacing-xs);
 }
 
 .client-contact {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-sm);
+    gap: var(--md-spacing-xs);
+    margin-bottom: var(--md-spacing-sm);
 }
 
 .client-contact p {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    color: var(--subtle);
+    gap: var(--md-spacing-sm);
+    color: var(--md-text-medium);
+    font-size: var(--md-font-size-body);
 }
 
 .client-contact i {
-    color: var(--muted);
+    color: var(--md-primary);
+    font-size: 18px;
 }
 
 .client-stats {
     display: flex;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-sm);
-    padding-top: var(--spacing-sm);
-    border-top: 1px solid var(--border-color);
+    gap: var(--md-spacing-md);
+    margin-top: var(--md-spacing-sm);
+    padding-top: var(--md-spacing-sm);
+    border-top: 1px solid rgba(224, 222, 244, 0.1);
 }
 
 .client-stat {
@@ -99,57 +113,126 @@
 }
 
 .client-stat-value {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--rose);
+    font-size: var(--md-font-size-title);
+    font-weight: 500;
+    color: var(--md-primary);
 }
 
 .client-stat-label {
-    font-size: 0.8rem;
-    color: var(--muted);
+    font-size: var(--md-font-size-small);
+    color: var(--md-text-medium);
+    margin-top: 2px;
 }
 
 .trust-rating {
-    color: var(--gold);
-    font-size: 14px;
+    color: var(--md-warning);
+    font-size: 16px;
     letter-spacing: 2px;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--md-spacing-xs);
 }
 
 .client-actions {
     display: flex;
     justify-content: flex-end;
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-sm);
+    gap: var(--md-spacing-sm);
+    margin-top: var(--md-spacing-md);
 }
 
 /* Список клієнтів */
 #clients-list-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--md-spacing-md);
 }
 
-@media (max-width: 768px) {
-    #clients-list-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Дії над клієнтом */
-.list-item-actions {
+/* Стилізація списку клієнтів */
+.list-item {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-md);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
+    position: relative;
     display: flex;
-    gap: var(--spacing-sm);
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.list-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--md-primary);
+}
+
+.list-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-3);
+}
+
+.list-item-details {
+    flex: 1;
 }
 
 .list-item-details h3 {
-    color: var(--foam);
-    margin-bottom: var(--spacing-xs);
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-subtitle);
+    font-weight: 500;
+    margin-bottom: var(--md-spacing-xs);
 }
 
 .list-item-details p {
-    color: var(--subtle);
-    margin-bottom: var(--spacing-xs);
+    color: var(--md-text-medium);
+    font-size: var(--md-font-size-body);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-item-actions {
+    display: flex;
+    gap: var(--md-spacing-xs);
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--md-surface-variant);
+    color: var(--md-text-medium);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--md-transition-standard);
+    font-size: 16px;
+}
+
+.action-btn:hover, .action-btn:focus {
+    background-color: rgba(224, 222, 244, 0.1);
+    color: var(--md-text-high);
+    transform: scale(1.1);
+}
+
+.action-btn.btn-edit:hover {
+    background-color: rgba(156, 207, 216, 0.2);
+    color: var(--md-secondary);
+}
+
+.action-btn.btn-confirm:hover {
+    background-color: rgba(49, 116, 143, 0.2);
+    color: var(--md-success);
+}
+
+.action-btn.btn-cancel:hover {
+    background-color: rgba(235, 111, 146, 0.2);
+    color: var(--md-error);
 }
 
 /* Анімація появи */
@@ -167,4 +250,25 @@
 .list-item {
     animation: fadeUp 0.3s ease forwards;
     animation-delay: calc(var(--delay, 0) * 0.05s);
+}
+
+/* Адаптивність */
+@media (max-width: 600px) {
+    #clients-list-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-container.scrolled {
+        margin: 0 -8px var(--md-spacing-sm);
+    }
+    
+    .client-card {
+        padding: var(--md-spacing-md);
+    }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+    #clients-list-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
 }

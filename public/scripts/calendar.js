@@ -57,9 +57,47 @@ const Calendar = {
     },
     
     // Оновлення заголовка календаря
+    // Оновлення заголовка календаря
     updateCalendarTitle() {
         const titleElement = document.getElementById('calendar-month');
-        titleElement.textContent = this.formatMonthYear(window.appState.selectedDate);
+        const currentYear = window.appState.selectedDate.getFullYear();
+        const currentMonth = window.appState.selectedDate.getMonth();
+        
+        // Додаємо селектор року до заголовка
+        titleElement.innerHTML = `
+            ${this.formatMonthYear(window.appState.selectedDate)}
+            <select id="year-selector" class="year-selector">
+                ${this.generateYearOptions(currentYear)}
+            </select>
+        `;
+        
+        // Додаємо обробник зміни року
+        const yearSelector = document.getElementById('year-selector');
+        if (yearSelector) {
+            yearSelector.value = currentYear;
+            yearSelector.addEventListener('change', (e) => {
+                const newYear = parseInt(e.target.value);
+                const newDate = new Date(window.appState.selectedDate);
+                newDate.setFullYear(newYear);
+                window.appState.selectedDate = newDate;
+                this.renderCalendar();
+                Appointments.loadAppointmentsForSelectedDate();
+            });
+        }
+    },
+    
+    // Генерація опцій для селектора років
+    generateYearOptions(currentYear) {
+        // Створюємо опції для 10 років назад і 5 років вперед
+        const startYear = currentYear - 10;
+        const endYear = currentYear + 5;
+        
+        let options = '';
+        for (let year = startYear; year <= endYear; year++) {
+            options += `<option value="${year}">${year}</option>`;
+        }
+        
+        return options;
     },
     
     // Рендерінг тижневого виду

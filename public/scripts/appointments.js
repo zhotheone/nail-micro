@@ -51,15 +51,98 @@ const Appointments = {
             // Оновлюємо стан завантаження
             window.appState.loading.appointments = true;
             
+            // Перевіряємо, чи це вихідний день
+            const dayOfWeek = window.appState.selectedDate.getDay();
+            const isWeekend = await this.checkIfWeekend(dayOfWeek);
+            
+            if (isWeekend) {
+                // Показуємо повідомлення про вихідний день
+                appointmentsList.innerHTML = `
+                    <div class="weekend-message">
+                        <i class="fas fa-umbrella-beach"></i>
+                        <h3>Вихідний день 😌</h3>
+                        <p>Сьогодні вихідний за розкладом. Відпочиваємо!</p>
+                    </div>
+                `;
+                window.appState.loading.appointments = false;
+                return;
+            }
+            
             // Форматування дати для API
             const formattedDate = this.formatDateForAPI(window.appState.selectedDate);
             
-            // Отримання записів через API
-            const appointments = await apiClient.getAppointmentsByDate(formattedDate);
-            window.appState.appointments = appointments;
+            console.log(`Запит записів на дату: ${formattedDate}`);
+            console.log(`Рік: ${window.appState.selectedDate.getFullYear()}`);
             
-            // Рендерінг списку записів
-            this.renderAppointmentsList();
+            try {
+                // Отримання записів через API
+                const appointments = await apiClient.getAppointmentsByDate(formattedDate);
+                
+                // Перевірка, чи немає записів і чи можуть бути записи з іншим роком
+                if (appointments.length === 0) {
+                    // Спробуємо знайти записи на ту ж дату, але з різними роками
+                    try {
+                        const day = window.appState.selectedDate.getDate();
+                        const month = window.appState.selectedDate.getMonth() + 1;
+                        
+                        // Використовуємо новий метод API для пошуку за днем/місяцем
+                        const dayMonthAppointments = await apiClient.searchAppointmentsByDayMonth(day, month);
+                        
+                        if (dayMonthAppointments.length > 0) {
+                            // Якщо знайдено записи з іншими роками, показуємо підказку
+                            const years = [...new Set(dayMonthAppointments.map(app => new Date(app.time).getFullYear()))].sort();
+                            
+                            if (years.length > 0) {
+                                const yearsText = years.join(', ');
+                                Toast.info(`Знайдено записи на ${day}.${month} в інших роках: ${yearsText}. Виберіть потрібний рік у селекторі вгорі.`, 'Підказка', { duration: 7000 });
+                            }
+                        }
+                    } catch (error) {
+                        // Ігноруємо помилку, просто продовжуємо
+                        console.log('Пошук записів за днем і місяцем не вдався:', error);
+                    }
+                }
+                
+                // Перевірка на валідність записів та виведення попереджень
+                let hasInvalidData = false;
+                
+                // Фільтрація і перевірка даних
+                const validatedAppointments = appointments.map(appointment => {
+                    // Визначаємо, чи є проблеми з ID клієнта або процедури
+                    // але НЕ фільтруємо записи, а просто помічаємо проблеми
+                    
+                    // Перевірка на правильність ID клієнта
+                    if (!appointment.clientId || typeof appointment.clientId !== 'object') {
+                        hasInvalidData = true;
+                        console.warn(`Запис #${appointment._id} має неправильний ID клієнта:`, appointment.clientId);
+                    }
+                    
+                    // Перевірка на правильність ID процедури
+                    if (!appointment.procedureId || typeof appointment.procedureId !== 'object') {
+                        hasInvalidData = true;
+                        console.warn(`Запис #${appointment._id} має неправильний ID процедури:`, appointment.procedureId);
+                    }
+                    
+                    return appointment;
+                });
+                
+                window.appState.appointments = validatedAppointments;
+                
+                // Показуємо попередження, якщо є некоректні дані
+                if (hasInvalidData) {
+                    Toast.warning('Деякі записи мають неправильні посилання. Перевірте дані.', 'Увага', { duration: 5000 });
+                }
+                
+                // Рендерінг списку записів
+                this.renderAppointmentsList();
+            } catch (error) {
+                console.error('Помилка обробки даних записів:', error);
+                Toast.error('Не вдалося обробити дані записів: ' + error.message);
+                
+                // Якщо є помилка парсингу даних, все одно показуємо дані як є
+                window.appState.appointments = [];
+                this.renderAppointmentsList();
+            }
             
             // Оновлюємо стан завантаження
             window.appState.loading.appointments = false;
@@ -67,10 +150,23 @@ const Appointments = {
             console.error('Помилка завантаження записів:', error);
             appointmentsList.innerHTML = `
                 <div class="error-message">
-                    Помилка завантаження записів: ${error.message}
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Помилка завантаження</h3>
+                    <p>Не вдалося завантажити записи: ${error.message}</p>
                 </div>
             `;
             window.appState.loading.appointments = false;
+        }
+    },
+    
+    // Перевірка, чи обраний день - вихідний
+    async checkIfWeekend(dayOfWeek) {
+        try {
+            const daySchedule = await Schedule.getDaySchedule(dayOfWeek);
+            return !daySchedule || daySchedule.isWeekend;
+        } catch (error) {
+            console.error('Помилка перевірки вихідного дня:', error);
+            return false;
         }
     },
     
@@ -99,12 +195,39 @@ const Appointments = {
         });
         
         // Додавання записів до списку
-        sortedAppointments.forEach(appointment => {
+        sortedAppointments.forEach((appointment, index) => {
             const appointmentTime = new Date(appointment.time);
             
-            // Знаходження процедури для визначення тривалості
-            const procedure = appointment.procedureId;
-            const durationMinutes = procedure ? procedure.timeToComplete : 60;
+            // Перевірка наявності даних клієнта
+            const hasValidClient = appointment.clientId && typeof appointment.clientId === 'object';
+            let clientName = 'Клієнт не знайдено';
+            let clientWarning = '';
+            
+            if (hasValidClient) {
+                clientName = `${appointment.clientId.name || ''} ${appointment.clientId.surName || ''}`.trim();
+                if (!clientName) {
+                    clientName = 'Ім\'я клієнта відсутнє';
+                }
+            } else {
+                clientWarning = `<div class="appointment-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Помилка: некоректний ID клієнта
+                </div>`;
+            }
+            
+            // Перевірка наявності даних процедури
+            const hasValidProcedure = appointment.procedureId && typeof appointment.procedureId === 'object';
+            let procedureName = 'Процедура не знайдена';
+            let procedureWarning = '';
+            let durationMinutes = 60; // Тривалість за замовчуванням
+            
+            if (hasValidProcedure) {
+                procedureName = appointment.procedureId.name || 'Назва процедури відсутня';
+                durationMinutes = appointment.procedureId.timeToComplete || 60;
+            } else {
+                procedureWarning = `<div class="appointment-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Помилка: некоректний ID процедури
+                </div>`;
+            }
             
             // Розрахунок часу закінчення
             const endTime = new Date(appointmentTime);
@@ -134,26 +257,39 @@ const Appointments = {
                     statusText = 'Скасовано';
                     statusClass = 'status-cancelled';
                     break;
+                default:
+                    statusText = 'Невідомий';
+                    statusClass = 'status-pending';
             }
             
             // Форматування ціни
-            const price = appointment.finalPrice || appointment.price;
+            const price = appointment.finalPrice || appointment.price || 0;
             const formattedPrice = this.formatCurrency(price);
             
             // Створення елемента для запису
             const appointmentElement = document.createElement('div');
-            appointmentElement.className = 'appointment-item';
+            appointmentElement.className = `appointment-item ${appointment.status || 'pending'}`;
+            appointmentElement.setAttribute('data-delay', index); // Для анімації
             appointmentElement.innerHTML = `
-                <div class="appointment-time">${startTimeStr} - ${endTimeStr}</div>
-                <div class="appointment-client">${appointment.clientId.name} ${appointment.clientId.surName}</div>
-                <div class="appointment-service">${procedure ? procedure.name : 'Невідома процедура'} • ${formattedPrice}</div>
+                <div class="appointment-time">
+                    <i class="fas fa-clock"></i>
+                    ${startTimeStr} - ${endTimeStr}
+                </div>
+                <div class="appointment-client">
+                    <i class="fas fa-user"></i>
+                    ${clientName}
+                </div>
+                ${clientWarning}
+                <div class="appointment-service">${procedureName} • ${formattedPrice}</div>
+                ${procedureWarning}
                 <div><span class="status ${statusClass}">${statusText}</span></div>
+                ${appointment.notes ? `<div class="appointment-notes">${appointment.notes}</div>` : ''}
                 <div class="appointment-actions">
-                    ${appointment.status === 'pending' ? `<button class="action-btn btn-confirm" data-id="${appointment._id}" data-action="confirm">✓ Підтвердити</button>` : ''}
-                    ${appointment.status === 'confirmed' ? `<button class="action-btn btn-confirm" data-id="${appointment._id}" data-action="complete">✓ Виконано</button>` : ''}
-                    <button class="action-btn btn-edit" data-id="${appointment._id}" data-action="edit">✏️ Редагувати</button>
-                    ${appointment.status !== 'cancelled' ? `<button class="action-btn btn-cancel" data-id="${appointment._id}" data-action="cancel">❌ Скасувати</button>` : ''}
-                    ${appointment.status === 'cancelled' ? `<button class="action-btn btn-cancel" data-id="${appointment._id}" data-action="delete">🗑️ Видалити</button>` : ''}
+                    ${appointment.status === 'pending' ? `<button class="action-btn btn-confirm" data-id="${appointment._id}" data-action="confirm"><i class="fas fa-check"></i> Підтвердити</button>` : ''}
+                    ${appointment.status === 'confirmed' ? `<button class="action-btn btn-confirm" data-id="${appointment._id}" data-action="complete"><i class="fas fa-check-double"></i> Виконано</button>` : ''}
+                    <button class="action-btn btn-edit" data-id="${appointment._id}" data-action="edit"><i class="fas fa-edit"></i> Редагувати</button>
+                    ${appointment.status !== 'cancelled' ? `<button class="action-btn btn-cancel" data-id="${appointment._id}" data-action="cancel"><i class="fas fa-ban"></i> Скасувати</button>` : ''}
+                    ${appointment.status === 'cancelled' ? `<button class="action-btn btn-cancel" data-id="${appointment._id}" data-action="delete"><i class="fas fa-trash"></i> Видалити</button>` : ''}
                 </div>
             `;
             
@@ -192,9 +328,9 @@ const Appointments = {
             const button = document.querySelector(`.action-btn[data-id="${appointmentId}"][data-action="${status === 'confirmed' ? 'confirm' : status === 'cancelled' ? 'cancel' : 'complete'}"]`);
             
             if (button) {
-                button.innerHTML = status === 'confirmed' ? '✓ Підтвердити' : 
-                                  status === 'cancelled' ? '❌ Скасувати' : 
-                                  '✓ Виконано';
+                button.innerHTML = status === 'confirmed' ? '<i class="fas fa-check"></i> Підтвердити' : 
+                                  status === 'cancelled' ? '<i class="fas fa-ban"></i> Скасувати' : 
+                                  '<i class="fas fa-check-double"></i> Виконано';
                 button.disabled = false;
             }
         }
@@ -230,7 +366,7 @@ const Appointments = {
             const button = document.querySelector(`.action-btn[data-id="${appointmentId}"][data-action="delete"]`);
             
             if (button) {
-                button.innerHTML = '🗑️ Видалити';
+                button.innerHTML = '<i class="fas fa-trash"></i> Видалити';
                 button.disabled = false;
             }
         }

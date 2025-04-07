@@ -1,178 +1,235 @@
-/* Список зустрічей */
+/* Записи в стилі Material Design */
 .appointments-list {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--md-spacing-md);
 }
 
 .appointment-item {
-    border-radius: var(--radius-md);
-    background-color: var(--surface);
-    padding: var(--spacing-md);
-    box-shadow: var(--shadow-sm);
-    border-left: 3px solid var(--primary-color);
-    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    border-radius: var(--md-radius-lg);
+    background-color: var(--md-surface);
+    padding: var(--md-spacing-lg);
+    box-shadow: var(--md-elevation-1);
+    border-left: 4px solid var(--md-primary);
+    transition: all var(--md-transition-standard);
     position: relative;
     overflow: hidden;
 }
 
 .appointment-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-3);
 }
 
 .appointment-time {
-    font-weight: bold;
-    margin-bottom: var(--spacing-xs);
-    color: var(--foam);
+    font-weight: 500;
+    margin-bottom: var(--md-spacing-xs);
+    color: var(--md-text-high);
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--md-spacing-xs);
+    font-size: var(--md-font-size-subtitle);
 }
 
 .appointment-time i {
-    font-size: 14px;
+    color: var(--md-secondary);
+    font-size: 18px;
 }
 
 .appointment-client {
-    font-weight: bold;
-    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    margin-bottom: var(--md-spacing-xs);
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--md-spacing-xs);
+    font-size: var(--md-font-size-subtitle);
+    color: var(--md-text-high);
 }
 
 .appointment-client i {
-    color: var(--subtle);
-    font-size: 14px;
+    color: var(--md-primary);
+    font-size: 18px;
 }
 
 .appointment-service {
-    color: var(--subtle);
-    font-size: 14px;
-    margin-bottom: var(--spacing-sm);
+    color: var(--md-text-medium);
+    font-size: var(--md-font-size-body);
+    margin-bottom: var(--md-spacing-sm);
 }
 
 .appointment-price {
     font-weight: 500;
-    color: var(--gold);
-    margin-bottom: var(--spacing-sm);
-    font-size: 14px;
+    color: var(--md-warning);
+    margin-bottom: var(--md-spacing-sm);
+    font-size: var(--md-font-size-body);
 }
 
 .appointment-notes {
-    background-color: var(--overlay);
-    padding: var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--spacing-sm);
-    font-size: 13px;
-    border-left: 2px solid var(--subtle);
+    background-color: var(--md-surface-variant);
+    padding: var(--md-spacing-sm);
+    border-radius: var(--md-radius-md);
+    margin-bottom: var(--md-spacing-sm);
+    font-size: var(--md-font-size-body);
+    border-left: 3px solid var(--md-text-medium);
+    color: var(--md-text-medium);
+}
+
+/* Попередження про помилки в записі */
+.appointment-warning {
+    background-color: rgba(246, 193, 119, 0.2);
+    padding: var(--md-spacing-sm);
+    border-radius: var(--md-radius-md);
+    margin-bottom: var(--md-spacing-sm);
+    font-size: var(--md-font-size-body);
+    border-left: 3px solid var(--md-warning);
+    color: var(--md-warning);
+    display: flex;
+    align-items: center;
+    gap: var(--md-spacing-xs);
 }
 
 .appointment-actions {
     display: flex;
-    gap: var(--spacing-xs);
-    margin-top: var(--spacing-sm);
+    gap: var(--md-spacing-xs);
+    margin-top: var(--md-spacing-md);
     flex-wrap: wrap;
 }
 
 .action-btn {
-    padding: 6px 12px;
-    border-radius: var(--radius-lg);
+    padding: 8px 16px;
+    border-radius: var(--md-radius-lg);
     border: none;
-    font-size: 12px;
+    font-size: var(--md-font-size-small);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 4px;
-    transition: all var(--transition-normal);
+    gap: 6px;
+    transition: all var(--md-transition-standard);
+    background-color: var(--md-surface-variant);
+    color: var(--md-text-medium);
+    height: 36px;
 }
 
 .action-btn i {
-    font-size: 14px;
+    font-size: 16px;
+}
+
+.action-btn:hover, .action-btn:focus {
+    transform: translateY(-2px);
+    box-shadow: var(--md-elevation-1);
 }
 
 .btn-confirm {
-    background-color: var(--success-color);
-    color: var(--text);
+    background-color: var(--md-success);
+    color: white;
 }
 
-.btn-confirm:hover {
-    background-color: var(--success-color);
+.btn-confirm:hover, .btn-confirm:focus {
+    background-color: var(--md-success);
     filter: brightness(1.1);
 }
 
 .btn-edit {
-    background-color: var(--pine);
-    color: var(--text);
+    background-color: var(--md-secondary-dark);
+    color: white;
 }
 
-.btn-edit:hover {
-    background-color: var(--pine);
+.btn-edit:hover, .btn-edit:focus {
+    background-color: var(--md-secondary-dark);
     filter: brightness(1.1);
 }
 
 .btn-cancel {
-    background-color: var(--danger-color);
-    color: var(--text);
+    background-color: var(--md-error);
+    color: white;
 }
 
-.btn-cancel:hover {
-    background-color: var(--danger-color);
+.btn-cancel:hover, .btn-cancel:focus {
+    background-color: var(--md-error);
     filter: brightness(1.1);
 }
 
 .no-appointments {
     text-align: center;
-    padding: var(--spacing-xl) var(--spacing-md);
-    color: var(--muted);
+    padding: var(--md-spacing-xl);
+    color: var(--md-text-medium);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    box-shadow: var(--md-elevation-1);
 }
 
 /* Статуси */
 .status {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: var(--radius-md);
-    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: var(--md-font-size-small);
     font-weight: 500;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--md-spacing-sm);
+    height: 24px;
+}
+
+.status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
 }
 
 .status-pending {
-    background-color: var(--gold);
-    color: var(--base);
+    background-color: rgba(246, 193, 119, 0.2);
+    color: var(--md-warning);
+}
+
+.status-pending::before {
+    background-color: var(--md-warning);
 }
 
 .status-confirmed {
-    background-color: var(--pine);
-    color: var(--text);
+    background-color: rgba(49, 116, 143, 0.2);
+    color: var(--md-success);
+}
+
+.status-confirmed::before {
+    background-color: var(--md-success);
 }
 
 .status-completed {
-    background-color: var(--foam);
-    color: var(--surface);
+    background-color: rgba(156, 207, 216, 0.2);
+    color: var(--md-secondary);
+}
+
+.status-completed::before {
+    background-color: var(--md-secondary);
 }
 
 .status-cancelled {
-    background-color: var(--danger-color);
-    color: var(--text);
+    background-color: rgba(235, 111, 146, 0.2);
+    color: var(--md-error);
+}
+
+.status-cancelled::before {
+    background-color: var(--md-error);
 }
 
 /* Різні стилі запису в залежності від статусу */
 .appointment-item.pending {
-    border-left-color: var(--gold);
+    border-left-color: var(--md-warning);
 }
 
 .appointment-item.confirmed {
-    border-left-color: var(--pine);
+    border-left-color: var(--md-success);
 }
 
 .appointment-item.completed {
-    border-left-color: var(--foam);
+    border-left-color: var(--md-secondary);
 }
 
 .appointment-item.cancelled {
-    border-left-color: var(--danger-color);
+    border-left-color: var(--md-error);
     opacity: 0.8;
 }
 
@@ -200,23 +257,50 @@
 
 @keyframes highlightNew {
     0%, 100% {
-        background-color: var(--surface);
+        background-color: var(--md-surface);
     }
     20%, 80% {
-        background-color: var(--overlay);
+        background-color: var(--md-surface-variant);
     }
+}
+
+/* Порожній стан для вихідних */
+.weekend-message {
+    text-align: center;
+    padding: var(--md-spacing-xl);
+    color: var(--md-text-medium);
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    box-shadow: var(--md-elevation-1);
+    margin: var(--md-spacing-lg) 0;
+}
+
+.weekend-message i {
+    font-size: 48px;
+    margin-bottom: var(--md-spacing-md);
+    display: block;
+    color: var(--md-warning);
+}
+
+.weekend-message h3 {
+    margin-bottom: var(--md-spacing-sm);
+    color: var(--md-text-high);
+    font-weight: 500;
+}
+
+.weekend-message p {
+    color: var(--md-text-medium);
 }
 
 /* Адаптивність списку записів */
 @media (min-width: 768px) {
     .appointments-list {
-        gap: var(--spacing-lg);
+        gap: var(--md-spacing-lg);
     }
     
     .appointment-item {
-        padding: var(--spacing-lg);
         display: grid;
-        grid-template-columns: 2fr 3fr 2fr;
+        grid-template-columns: 1fr 2fr 1fr;
         align-items: center;
     }
     
@@ -226,7 +310,7 @@
     }
     
     .appointment-item-middle {
-        padding: 0 var(--spacing-md);
+        padding: 0 var(--md-spacing-md);
     }
     
     .appointment-item-right {
@@ -238,5 +322,23 @@
     
     .appointment-actions {
         justify-content: flex-end;
+    }
+}
+
+@media (max-width: 600px) {
+    .appointment-item {
+        padding: var(--md-spacing-md);
+    }
+    
+    .appointment-actions {
+        flex-wrap: wrap;
+        gap: var(--md-spacing-xs);
+    }
+    
+    .action-btn {
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+        padding: 6px 12px;
     }
 }

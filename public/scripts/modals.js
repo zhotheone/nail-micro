@@ -156,9 +156,61 @@ const Modals = {
             await Forms.loadClientSelect('edit-appointment-client');
             await Forms.loadProcedureSelect('edit-appointment-procedure');
             
-            // Встановлення вибраних значень
-            document.getElementById('edit-appointment-client').value = appointment.clientId._id;
-            document.getElementById('edit-appointment-procedure').value = appointment.procedureId._id;
+            // Встановлення вибраних значень з перевіркою на коректність
+            const clientSelect = document.getElementById('edit-appointment-client');
+            const procedureSelect = document.getElementById('edit-appointment-procedure');
+            
+            // Перевірка на правильність ID клієнта
+            if (appointment.clientId && typeof appointment.clientId === 'object' && appointment.clientId._id) {
+                clientSelect.value = appointment.clientId._id;
+                
+                // Якщо вибраного клієнта немає в списку, додаємо його
+                if (clientSelect.value !== appointment.clientId._id) {
+                    const option = document.createElement('option');
+                    option.value = appointment.clientId._id;
+                    option.textContent = `${appointment.clientId.name || ''} ${appointment.clientId.surName || ''} (ID: ${appointment.clientId._id})`;
+                    clientSelect.appendChild(option);
+                    clientSelect.value = appointment.clientId._id;
+                    
+                    // Додаємо попередження про проблеми з клієнтом
+                    Toast.warning('Можливі проблеми з даними клієнта. Будь ласка, перевірте.', 'Увага');
+                }
+            } else {
+                // Якщо клієнт не знайдений, створюємо порожню опцію
+                const option = document.createElement('option');
+                option.value = "broken";
+                option.textContent = "⚠️ Клієнт не знайдений";
+                clientSelect.appendChild(option);
+                clientSelect.value = "broken";
+                
+                Toast.warning('Клієнт для цього запису не знайдений. Оберіть нового клієнта.', 'Увага');
+            }
+            
+            // Перевірка на правильність ID процедури
+            if (appointment.procedureId && typeof appointment.procedureId === 'object' && appointment.procedureId._id) {
+                procedureSelect.value = appointment.procedureId._id;
+                
+                // Якщо вибраної процедури немає в списку, додаємо її
+                if (procedureSelect.value !== appointment.procedureId._id) {
+                    const option = document.createElement('option');
+                    option.value = appointment.procedureId._id;
+                    option.textContent = `${appointment.procedureId.name || 'Невідома процедура'} (ID: ${appointment.procedureId._id})`;
+                    procedureSelect.appendChild(option);
+                    procedureSelect.value = appointment.procedureId._id;
+                    
+                    // Додаємо попередження про проблеми з процедурою
+                    Toast.warning('Можливі проблеми з даними процедури. Будь ласка, перевірте.', 'Увага');
+                }
+            } else {
+                // Якщо процедура не знайдена, створюємо порожню опцію
+                const option = document.createElement('option');
+                option.value = "broken";
+                option.textContent = "⚠️ Процедура не знайдена";
+                procedureSelect.appendChild(option);
+                procedureSelect.value = "broken";
+                
+                Toast.warning('Процедура для цього запису не знайдена. Оберіть нову процедуру.', 'Увага');
+            }
             
             // Встановлення дати та часу
             const appointmentDate = new Date(appointment.time);
@@ -166,9 +218,9 @@ const Modals = {
             document.getElementById('edit-appointment-time').value = Forms.formatTimeForInput(appointmentDate);
             
             // Встановлення цін та статусу
-            document.getElementById('edit-appointment-price').value = appointment.price;
-            document.getElementById('edit-appointment-finalPrice').value = appointment.finalPrice || appointment.price;
-            document.getElementById('edit-appointment-status').value = appointment.status;
+            document.getElementById('edit-appointment-price').value = appointment.price || 0;
+            document.getElementById('edit-appointment-finalPrice').value = appointment.finalPrice || appointment.price || 0;
+            document.getElementById('edit-appointment-status').value = appointment.status || 'pending';
             document.getElementById('edit-appointment-notes').value = appointment.notes || '';
             
             // Вимикаємо індикатор завантаження
@@ -179,6 +231,9 @@ const Modals = {
         } catch (error) {
             console.error('Помилка відкриття форми редагування запису:', error);
             Toast.error('Не вдалося завантажити дані для редагування запису.');
+            
+            // Вимикаємо індикатор завантаження
+            Forms.setFormLoading(document.getElementById('edit-appointment-form'), false);
         }
     },
     

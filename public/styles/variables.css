@@ -1,59 +1,129 @@
-/* Змінні кольорів і розмірів */
+/* Змінні кольорів і розмірів згідно Material Design */
 :root {
-    /* Rose Pine Theme */
-    --base: #191724;
-    --surface: #1f1d2e;
-    --overlay: #26233a;
-    --muted: #6e6a86;
-    --subtle: #908caa;
-    --text: #e0def4;
-    --love: #eb6f92;
-    --gold: #f6c177;
-    --rose: #ebbcba;
-    --pine: #31748f;
-    --foam: #9ccfd8;
-    --iris: #c4a7e7;
-
-    /* Функціональні кольори */
-    --primary-color: var(--rose);
-    --secondary-color: var(--surface);
-    --accent-color: var(--love);
-    --light-bg: var(--overlay);
-    --border-color: var(--muted);
-    --success-color: var(--pine);
-    --warning-color: var(--gold);
-    --danger-color: var(--love);
-    --info-color: var(--foam);
-
-    /* Розміри */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
+    /* Material Design колірна палітра (Rose Pine Theme варіант) */
+    --md-primary: #eb6f92;      /* Primary color */
+    --md-primary-light: #ebbcba; /* Light variant of primary */
+    --md-primary-dark: #c4506b;  /* Dark variant of primary */
     
-    /* Радіуси */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-circle: 50%;
+    --md-secondary: #9ccfd8;    /* Secondary color */
+    --md-secondary-light: #c4e3e8; /* Light variant of secondary */
+    --md-secondary-dark: #31748f; /* Dark variant of secondary */
     
-    /* Тіні */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --md-background: #191724;   /* App background */
+    --md-surface: #1f1d2e;      /* Surface color */
+    --md-surface-variant: #26233a; /* Surface variant */
     
-    /* Анімації */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
+    --md-error: #eb6f92;        /* Error color */
+    --md-warning: #f6c177;      /* Warning color */
+    --md-success: #31748f;      /* Success color */
+    --md-info: #9ccfd8;         /* Info color */
+    
+    /* Текстові кольори */
+    --md-on-primary: #191724;   /* Text on primary */
+    --md-on-secondary: #191724; /* Text on secondary */
+    --md-on-background: #e0def4; /* Text on background */
+    --md-on-surface: #e0def4;   /* Text on surface */
+    --md-on-error: #191724;     /* Text on error */
+    
+    /* Відтінки тексту */
+    --md-text-high: rgba(224, 222, 244, 1);      /* High emphasis text */
+    --md-text-medium: rgba(224, 222, 244, 0.7);  /* Medium emphasis text */
+    --md-text-disabled: rgba(224, 222, 244, 0.5); /* Disabled text */
+    
+    /* Тіні елевацій згідно Material Design */
+    --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --md-elevation-2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+    --md-elevation-3: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    --md-elevation-4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    --md-elevation-5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+    
+    /* Розміри елементів */
+    --md-spacing-unit: 8px;
+    --md-spacing-xs: var(--md-spacing-unit);     /* 8px */
+    --md-spacing-sm: calc(var(--md-spacing-unit) * 2); /* 16px */
+    --md-spacing-md: calc(var(--md-spacing-unit) * 3); /* 24px */
+    --md-spacing-lg: calc(var(--md-spacing-unit) * 4); /* 32px */
+    --md-spacing-xl: calc(var(--md-spacing-unit) * 6); /* 48px */
+    
+    /* Радіуси заокруглень */
+    --md-radius-sm: 4px;
+    --md-radius-md: 8px;
+    --md-radius-lg: 16px;
+    --md-radius-xl: 24px;
+    --md-radius-circle: 50%;
+    
+    /* Анімації (згідно Material Design easing) */
+    --md-transition-standard: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    --md-transition-decelerate: 0.3s cubic-bezier(0.0, 0.0, 0.2, 1);
+    --md-transition-accelerate: 0.3s cubic-bezier(0.4, 0.0, 1, 1);
     
     /* Z-індекси */
+    --md-z-drawer: 16;
+    --md-z-navbar: 24;
+    --md-z-modal: 32;
+    --md-z-toast: 64;
+    --md-z-tooltip: 128;
+    
+    /* Підтримка старих змінних (для забезпечення сумісності) */
+    --base: var(--md-background);
+    --surface: var(--md-surface);
+    --overlay: var(--md-surface-variant);
+    --muted: rgba(224, 222, 244, 0.6);
+    --subtle: rgba(224, 222, 244, 0.8);
+    --text: var(--md-on-background);
+    --love: var(--md-error);
+    --gold: var(--md-warning);
+    --rose: var(--md-primary);
+    --pine: var(--md-secondary-dark);
+    --foam: var(--md-secondary);
+    --iris: #c4a7e7;
+    
+    --primary-color: var(--md-primary);
+    --secondary-color: var(--md-secondary);
+    --accent-color: var(--md-primary-dark);
+    --light-bg: var(--md-surface-variant);
+    --border-color: rgba(224, 222, 244, 0.12);
+    --success-color: var(--md-success);
+    --warning-color: var(--md-warning);
+    --danger-color: var(--md-error);
+    --info-color: var(--md-info);
+    
+    --spacing-xs: var(--md-spacing-xs);
+    --spacing-sm: var(--md-spacing-sm);
+    --spacing-md: var(--md-spacing-md);
+    --spacing-lg: var(--md-spacing-lg);
+    --spacing-xl: var(--md-spacing-xl);
+    
+    --radius-sm: var(--md-radius-sm);
+    --radius-md: var(--md-radius-md);
+    --radius-lg: var(--md-radius-lg);
+    --radius-xl: var(--md-radius-xl);
+    --radius-circle: var(--md-radius-circle);
+    
+    --shadow-sm: var(--md-elevation-1);
+    --shadow-md: var(--md-elevation-2);
+    --shadow-lg: var(--md-elevation-3);
+    
+    --transition-fast: 0.15s ease;
+    --transition-normal: var(--md-transition-standard);
+    --transition-slow: 0.5s ease;
+    
     --z-below: -1;
     --z-normal: 1;
     --z-above: 10;
-    --z-modal: 100;
-    --z-toast: 200;
-    --z-tooltip: 300;
+    --z-modal: var(--md-z-modal);
+    --z-toast: var(--md-z-toast);
+    --z-tooltip: var(--md-z-tooltip);
+    
+    /* Типографіка */
+    --md-font-family: 'Roboto', 'Fira Code', sans-serif;
+    --md-font-size-small: 12px;
+    --md-font-size-body: 14px;
+    --md-font-size-subtitle: 16px;
+    --md-font-size-title: 20px;
+    --md-font-size-headline: 24px;
+    
+    /* Розміри кнопок та полів вводу */
+    --md-button-height: 36px;
+    --md-input-height: 56px;
 }

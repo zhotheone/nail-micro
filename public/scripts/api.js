@@ -206,6 +206,17 @@ class ApiClient {
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
+    async getAppointmentsByDate(date) {
+        // Приймає дату у форматі 'YYYY-MM-DD'
+        console.log(`API запит на дату: ${date}`);
+        return this.request(`/appointments/date/${date}`);
+    }
+    
+    // Новий метод для пошуку записів за днем і місяцем незалежно від року
+    async searchAppointmentsByDayMonth(day, month) {
+        return this.request(`/appointments/search?day=${day}&month=${month}`);
+    }
+
 }
 
 // Створення екземпляру API клієнта

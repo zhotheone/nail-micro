@@ -1,46 +1,118 @@
-/* Календар та розклад */
+/* Календар в стилі Material Design */
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--md-spacing-sm);
 }
 
 .calendar-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--foam);
+    font-size: var(--md-font-size-title);
+    font-weight: 500;
+    color: var(--md-text-high);
+    display: flex;
+    align-items: center;
+    gap: var(--md-spacing-sm);
+}
+
+/* Селектор року */
+.year-selector {
+    background-color: var(--md-surface-variant);
+    border: none;
+    border-radius: var(--md-radius-md);
+    color: var(--md-text-high);
+    padding: 4px 24px 4px 8px;
+    font-size: var(--md-font-size-body);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e0def4' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l-6-6 1.5-1.5L8 8l4.5-4.5L14 5l-6 6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    cursor: pointer;
+    transition: all var(--md-transition-standard);
+}
+
+.year-selector:hover {
+    background-color: rgba(224, 222, 244, 0.1);
 }
 
 .calendar-actions {
     display: flex;
-    gap: 10px;
+    gap: var(--md-spacing-sm);
 }
 
 .view-toggle {
     display: flex;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border: 1px solid rgba(224, 222, 244, 0.1);
+    border-radius: var(--md-radius-lg);
     overflow: hidden;
+    box-shadow: var(--md-elevation-1);
+    background-color: var(--md-surface-variant);
 }
 
 .view-toggle-btn {
-    padding: 6px 12px;
+    padding: 8px 16px;
     border: none;
-    background-color: var(--surface);
-    color: var(--muted);
+    background-color: transparent;
+    color: var(--md-text-medium);
     cursor: pointer;
-    font-size: 12px;
-    transition: all var(--transition-normal);
+    font-size: var(--md-font-size-body);
+    transition: all var(--md-transition-standard);
+    position: relative;
+    overflow: hidden;
 }
 
-.view-toggle-btn:hover {
-    color: var(--text);
+.view-toggle-btn:hover, .view-toggle-btn:focus {
+    color: var(--md-text-high);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .view-toggle-btn.active {
-    background-color: var(--primary-color);
-    color: var(--base);
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+}
+
+/* Календар навігація */
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--md-spacing-sm);
+}
+
+.calendar-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--md-transition-standard);
+    background-color: var(--md-surface-variant);
+    color: var(--md-text-medium);
+    border: none;
+}
+
+.calendar-nav-btn:hover, .calendar-nav-btn:focus {
+    background-color: rgba(224, 222, 244, 0.1);
+    color: var(--md-text-high);
+}
+
+.calendar-today-btn {
+    padding: 6px 16px;
+    border-radius: var(--md-radius-md);
+    background-color: var(--md-surface-variant);
+    border: none;
+    color: var(--md-text-medium);
+    cursor: pointer;
+    transition: all var(--md-transition-standard);
+    font-size: var(--md-font-size-small);
+}
+
+.calendar-today-btn:hover, .calendar-today-btn:focus {
+    background-color: rgba(224, 222, 244, 0.1);
+    color: var(--md-text-high);
 }
 
 /* Режим перегляду за днями */
@@ -49,9 +121,11 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     gap: 8px;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-xs);
+    margin-bottom: var(--md-spacing-lg);
+    padding-bottom: var(--md-spacing-xs);
     -webkit-overflow-scrolling: touch; /* Для кращої прокрутки на iOS */
+    scrollbar-width: thin;
+    scrollbar-color: var(--md-text-disabled) transparent;
 }
 
 .days-view::-webkit-scrollbar {
@@ -59,79 +133,87 @@
 }
 
 .days-view::-webkit-scrollbar-track {
-    background: var(--surface);
-    border-radius: var(--radius-md);
+    background: transparent;
 }
 
 .days-view::-webkit-scrollbar-thumb {
-    background-color: var(--muted);
-    border-radius: var(--radius-md);
+    background-color: var(--md-text-disabled);
+    border-radius: var(--md-radius-circle);
 }
 
 .day-header {
     scroll-snap-align: start;
-    min-width: 60px;
+    min-width: 64px;
     text-align: center;
-    padding: 8px 0;
-    border-radius: var(--radius-md);
-    background-color: var(--overlay);
+    padding: 10px 0;
+    border-radius: var(--md-radius-lg);
+    background-color: var(--md-surface);
     cursor: pointer;
-    transition: all var(--transition-normal);
+    transition: all var(--md-transition-standard);
     border: 1px solid transparent;
+    box-shadow: var(--md-elevation-1);
+    position: relative;
+    overflow: hidden;
 }
 
-.day-header:hover {
+.day-header:hover, .day-header:focus {
     transform: translateY(-2px);
-    border-color: var(--subtle);
+    box-shadow: var(--md-elevation-2);
+    background-color: var(--md-surface-variant);
 }
 
 .day-header.active {
-    background-color: var(--primary-color);
-    color: var(--base);
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--md-elevation-3);
 }
 
 .day-header.today {
-    border: 1px dashed var(--foam);
+    border: 2px solid var(--md-secondary);
 }
 
 .day-name {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: var(--md-font-size-small);
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
 .day-date {
-    font-size: 16px;
+    font-size: var(--md-font-size-title);
     margin-top: 4px;
+    font-weight: 500;
 }
 
 /* Місячний перегляд календаря */
 .month-view {
     display: none;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--md-spacing-lg);
 }
 
 .month-view.active {
     display: block;
-    animation: fadeIn var(--transition-normal);
+    animation: fadeIn var(--md-transition-standard);
 }
 
 .month-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 4px;
-    background-color: var(--overlay);
-    border-radius: var(--radius-md);
-    padding: 8px;
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-md);
+    box-shadow: var(--md-elevation-1);
 }
 
 .weekday-header {
     text-align: center;
-    font-size: 12px;
-    color: var(--subtle);
+    font-size: var(--md-font-size-small);
+    color: var(--md-text-medium);
     padding: 8px 0;
     font-weight: 500;
+    text-transform: uppercase;
 }
 
 .month-day {
@@ -140,85 +222,97 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
+    border-radius: var(--md-radius-md);
+    font-size: var(--md-font-size-body);
     position: relative;
     cursor: pointer;
-    transition: all var(--transition-normal);
-    border: 1px solid transparent;
+    transition: all var(--md-transition-standard);
+    background-color: var(--md-surface-variant);
 }
 
-.month-day:hover {
-    background-color: var(--surface);
-    border-color: var(--subtle);
+.month-day:hover, .month-day:focus {
+    background-color: rgba(224, 222, 244, 0.1);
+    transform: translateY(-2px);
+    box-shadow: var(--md-elevation-1);
 }
 
 .month-day.has-appointments::after {
     content: "";
     position: absolute;
     bottom: 4px;
-    width: 4px;
-    height: 4px;
-    background-color: var(--love);
+    width: 6px;
+    height: 6px;
+    background-color: var(--md-primary);
     border-radius: 50%;
 }
 
 .month-day.today {
-    background-color: var(--primary-color);
-    color: var(--base);
+    background-color: var(--md-secondary);
+    color: var(--md-on-secondary);
+    font-weight: 500;
 }
 
 .month-day.selected {
-    border-color: var(--foam);
-    background-color: var(--overlay);
-    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--md-primary);
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--md-elevation-2);
+    font-weight: 500;
 }
 
 .month-day.other-month {
-    color: var(--muted);
+    color: var(--md-text-disabled);
     opacity: 0.6;
+    background-color: transparent;
 }
 
-/* Навігація календаря */
-.calendar-nav {
+/* Часові слоти */
+.day-time-slots {
     display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+    flex-direction: column;
+    gap: 4px;
+    margin-top: var(--md-spacing-sm);
 }
 
-.calendar-nav-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-circle);
-    border: none;
-    background-color: var(--overlay);
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-normal);
-}
-
-.calendar-nav-btn:hover {
-    background-color: var(--primary-color);
-    color: var(--base);
-}
-
-.calendar-today-btn {
-    background-color: var(--overlay);
-    border: none;
-    color: var(--text);
+.time-slot {
+    font-size: var(--md-font-size-small);
     padding: 4px 8px;
-    border-radius: var(--radius-md);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all var(--transition-normal);
+    border-radius: var(--md-radius-sm);
+    color: var(--md-text-high);
+    background-color: var(--md-surface-variant);
+    white-space: nowrap;
 }
 
-.calendar-today-btn:hover {
-    background-color: var(--primary-color);
-    color: var(--base);
+.time-slot.booked {
+    background-color: rgba(235, 111, 146, 0.2);
+    color: var(--md-primary);
+}
+
+.time-slot.available {
+    background-color: rgba(49, 116, 143, 0.2);
+    color: var(--md-success);
+}
+
+/* Індикатори слотів для календаря */
+.day-header .slot-indicator {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    margin-top: var(--md-spacing-xs);
+}
+
+.slot-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--md-surface-variant);
+}
+
+.slot-dot.booked {
+    background-color: var(--md-primary);
+}
+
+.slot-dot.available {
+    background-color: var(--md-success);
 }
 
 /* Анімація для перемикання календаря */
@@ -253,21 +347,60 @@
 }
 
 /* Адаптивний дизайн для календаря */
-@media (min-width: 768px) {
+@media (max-width: 600px) {
+    .calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .calendar-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .view-toggle {
+        flex: 1;
+    }
+    
+    .view-toggle-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px;
+    }
+    
     .month-grid {
-        gap: 6px;
-        padding: 12px;
+        padding: var(--md-spacing-sm);
+        gap: 2px;
     }
     
     .month-day {
-        font-size: 16px;
+        font-size: 12px;
+    }
+    
+    .day-header {
+        min-width: 60px;
+    }
+    
+    .day-date {
+        font-size: var(--md-font-size-subtitle);
+    }
+}
+
+@media (min-width: 768px) {
+    .month-grid {
+        gap: 8px;
+        padding: var(--md-spacing-lg);
+    }
+    
+    .month-day {
+        font-size: var(--md-font-size-subtitle);
     }
     
     .calendar-header {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--md-spacing-xl);
     }
     
     .calendar-title {
-        font-size: 22px;
+        font-size: var(--md-font-size-headline);
     }
 }
