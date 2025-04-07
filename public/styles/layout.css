@@ -70,6 +70,16 @@ body {
     transform: scale(1);
 }
 
+/* Виправлення центрування іконки в кнопці */
+.fab i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    line-height: 1;
+}
+
 .fab:hover, .fab:focus {
     box-shadow: var(--md-elevation-4);
     background-color: var(--md-primary-dark);

@@ -63,13 +63,19 @@ const Forms = {
                 this.setFormLoading(form, true);
                 
                 // Отримання даних форми безпосередньо з елементів
-                const appointmentId = form.querySelector('[name="id"]').value;
-                let clientId = form.querySelector('[name="clientId"]').value;
-                let procedureId = form.querySelector('[name="procedureId"]').value;
+                // Виправлення: перевіряємо наявність поля id
+                const idField = form.querySelector('[name="id"]');
+                const appointmentId = idField ? idField.value : null;
+                const clientId = form.querySelector('[name="clientId"]').value;
+                const procedureId = form.querySelector('[name="procedureId"]').value;
                 const dateStr = form.querySelector('[name="date"]').value;
                 const timeStr = form.querySelector('[name="time"]').value;
                 const price = parseFloat(form.querySelector('[name="price"]').value);
-                const finalPrice = parseFloat(form.querySelector('[name="finalPrice"]').value);
+                
+                // Виправлення: перевіряємо наявність поля finalPrice 
+                const finalPriceField = form.querySelector('[name="finalPrice"]');
+                const finalPrice = finalPriceField ? parseFloat(finalPriceField.value) : price;
+                
                 const status = form.querySelector('[name="status"]').value;
                 const notes = form.querySelector('[name="notes"]').value;
                 
@@ -115,43 +121,37 @@ const Forms = {
                     procedureId,
                     time: dateTime.toISOString(),
                     price,
-                    finalPrice,
+                    finalPrice: finalPrice || price,
                     status,
                     notes
                 };
                 
-                console.log('Дані запису для оновлення:', appointmentData);
+                console.log('Дані запису:', appointmentData);
                 
-                try {
-                    // Відправка запису через API
-                    await apiClient.updateAppointment(appointmentId, appointmentData);
-                    
-                    // Успішне оновлення
+                let result;
+                
+                if (appointmentId) {
+                    // Оновлення існуючого запису
+                    console.log('Оновлюємо існуючий запис ID:', appointmentId);
+                    result = await apiClient.updateAppointment(appointmentId, appointmentData);
                     Toast.success('Запис успішно оновлено.');
-                    
-                    // Закриття модального вікна
                     Modals.close('edit-appointment-modal');
-                    
-                    // Оновлення списку записів
-                    Appointments.loadAppointmentsForSelectedDate();
-                } catch (apiError) {
-                    // Специфічна обробка помилок API
-                    console.error('Помилка API при оновленні запису:', apiError);
-                    
-                    if (apiError.message && apiError.message.includes('Клієнт не знайдений')) {
-                        Toast.error('Вибраний клієнт не існує в базі даних. Перевірте дані.');
-                    } else if (apiError.message && apiError.message.includes('Процедура не знайдена')) {
-                        Toast.error('Вибрана процедура не існує в базі даних. Перевірте дані.');
-                    } else {
-                        Toast.error('Не вдалося оновити запис: ' + apiError.message);
-                    }
+                } else {
+                    // Створення нового запису
+                    console.log('Створюємо новий запис');
+                    result = await apiClient.createAppointment(appointmentData);
+                    Toast.success('Запис успішно створено.');
+                    Modals.close('booking-modal');
                 }
+                
+                // Оновлення списку записів
+                Appointments.loadAppointmentsForSelectedDate();
                 
                 // Розблокування форми
                 this.setFormLoading(form, false);
             } catch (error) {
-                console.error('Помилка оновлення запису:', error);
-                Toast.error('Не вдалося оновити запис: ' + error.message);
+                console.error('Помилка збереження запису:', error);
+                Toast.error('Не вдалося зберегти запис: ' + error.message);
                 this.setFormLoading(form, false);
             }
         });

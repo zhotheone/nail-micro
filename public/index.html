@@ -148,9 +148,28 @@
             </a>
         </div>
 
-        <!-- Плаваюча кнопка додавання -->
-        <div class="fab" id="add-button">
-            <i class="fas fa-plus"></i>
+        <!-- Плаваюча кнопка додавання з мініатюрними кнопками -->
+        <div class="fab-overlay" id="fab-overlay"></div>
+        <div class="fab-container" id="fab-container">
+            <button class="fab-main" id="fab-main" aria-label="Додати новий запис">
+                <i class="fas fa-plus"></i>
+            </button>
+            
+            <!-- Мініатюрні кнопки дій -->
+            <button class="fab-mini appointment" id="fab-add-appointment" aria-label="Додати запис">
+                <i class="fas fa-calendar-plus"></i>
+                <span class="fab-label">Новий запис</span>
+            </button>
+            
+            <button class="fab-mini client" id="fab-add-client" aria-label="Додати клієнта">
+                <i class="fas fa-user-plus"></i>
+                <span class="fab-label">Новий клієнт</span>
+            </button>
+            
+            <button class="fab-mini procedure" id="fab-add-procedure" aria-label="Додати процедуру">
+                <i class="fas fa-plus-circle"></i>
+                <span class="fab-label">Нова процедура</span>
+            </button>
         </div>
 
         <!-- Модальне вікно для додавання запису -->
@@ -348,7 +367,8 @@
     <script src="scripts/toast.js"></script>
     <script src="scripts/modals.js"></script>
     <script src="scripts/ripple.js"></script>
-     
+    <script src="scripts/fab.js"></script>
+    
     <!-- Підключення функціональних модулів -->
     <script src="scripts/forms.js"></script>
     <script src="scripts/calendar.js"></script>
@@ -359,7 +379,7 @@
     <script src="scripts/stats.js"></script>
     <script src="scripts/router.js"></script>
     <script src="scripts/legacySupport.js"></script>
-     
+    
     <!-- Основний файл додатку -->
     <script src="scripts/main.js"></script>
 </body>

@@ -1,9 +1,10 @@
-// Модуль для відображення сповіщень (тостів)
+// Виправлений метод closeToast у модулі Toast
 const Toast = {
     container: null,
     queue: [],
     maxVisible: 3,
     visibleCount: 0,
+    toasts: new Set(), // Зберігаємо активні тости для перевірки
     
     // Ініціалізація тостів
     init() {
@@ -71,6 +72,9 @@ const Toast = {
         // Додаємо тост до контейнера
         this.container.appendChild(toast);
         
+        // Додаємо до колекції активних тостів
+        this.toasts.add(toast);
+        
         // Відображаємо тост з анімацією
         setTimeout(() => {
             toast.classList.add('show');
@@ -84,9 +88,22 @@ const Toast = {
         
         // Обробник закриття тосту
         const closeToast = () => {
+            // Перевіряємо, чи тост ще існує в DOM і в колекції
+            if (!this.toasts.has(toast)) {
+                return;
+            }
+            
             toast.classList.remove('show');
+            
+            // Видаляємо тост із колекції
+            this.toasts.delete(toast);
+            
             setTimeout(() => {
-                this.container.removeChild(toast);
+                // Перевіряємо, чи тост ще в DOM
+                if (toast.parentNode === this.container) {
+                    this.container.removeChild(toast);
+                }
+                
                 this.visibleCount--;
                 
                 // Якщо є тости в черзі - показуємо наступний
@@ -136,8 +153,3 @@ const Toast = {
         return this.create({ type: 'info', title, message, ...options });
     }
 };
-
-// Ініціалізуємо тости
-document.addEventListener('DOMContentLoaded', () => {
-    Toast.init();
-});

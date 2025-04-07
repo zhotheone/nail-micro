@@ -6,24 +6,75 @@ const Stats = {
     // Ініціалізація
     init() {
         console.log('Ініціалізація модуля статистики');
+        
+        // Додаємо елемент для відображення діапазону дат, якщо ще не існує
+        this.addDateRangeElement();
+        
         // Налаштування кнопок вибору періоду
         const periodButtons = document.querySelectorAll('.period-btn');
-        periodButtons.forEach(button => {
-            button.addEventListener('click', () => {
+        periodButtons.forEach(period => {
+            period.addEventListener('click', () => {
                 // Зміна активної кнопки
                 periodButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
+                period.classList.add('active');
                 
                 // Зміна періоду та оновлення статистики
-                this.currentPeriod = button.dataset.period;
+                this.currentPeriod = period.dataset.period;
+                
+                // Оновлення відображення діапазону дат
+                this.updateDateRangeText();
+                
+                // Завантаження статистики
                 this.loadStatistics();
             });
         });
+        
+        // Оновлюємо відображення діапазону дат при ініціалізації
+        this.updateDateRangeText();
         
         // Запуск завантаження статистики при ініціалізації
         setTimeout(() => {
             this.loadStatistics();
         }, 100);
+    },
+    
+    // Додавання елемента для відображення діапазону дат
+    addDateRangeElement() {
+        const statsHeader = document.querySelector('.stats-header');
+        if (!statsHeader) return;
+        
+        // Перевіряємо, чи вже існує елемент
+        if (document.getElementById('stats-date-range')) return;
+        
+        // Створюємо елемент для відображення діапазону дат
+        const dateRangeElement = document.createElement('div');
+        dateRangeElement.id = 'stats-date-range';
+        dateRangeElement.className = 'stats-date-range';
+        
+        // Додаємо елемент після селектора періоду
+        const periodSelector = statsHeader.querySelector('.period-selector');
+        if (periodSelector && periodSelector.parentNode) {
+            periodSelector.parentNode.insertBefore(dateRangeElement, periodSelector.nextSibling);
+        } else {
+            statsHeader.appendChild(dateRangeElement);
+        }
+    },
+    
+    // Оновлення тексту діапазону дат
+    updateDateRangeText() {
+        const dateRangeElement = document.getElementById('stats-date-range');
+        if (!dateRangeElement) return;
+        
+        const { startDate, endDate } = this.getDateRange(this.currentPeriod);
+        
+        // Форматування дат
+        const formatDate = (date) => {
+            return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+        };
+        
+        // Оновлення тексту
+        const rangeText = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+        dateRangeElement.innerHTML = `<i class="fas fa-calendar-alt"></i> ${rangeText}`;
     },
     
     // Завантаження та відображення статистики
@@ -579,6 +630,30 @@ const Stats = {
         `;
         
         container.innerHTML = tableHTML;
+    },
+    
+    getDateRange(period) {
+        const now = new Date();
+        const startDate = new Date();
+        
+        switch(period) {
+            case 'week':
+                startDate.setDate(now.getDate() - 7);
+                break;
+            case 'month':
+                startDate.setMonth(now.getMonth() - 1);
+                break;
+            case 'year':
+                startDate.setFullYear(now.getFullYear() - 1);
+                break;
+            default:
+                startDate.setMonth(now.getMonth() - 1); // За замовчуванням - місяць
+        }
+        
+        // Встановлюємо час початку і кінця дня
+        startDate.setHours(0, 0, 0, 0);
+        
+        return { startDate, endDate: now };
     },
     
     // Показати індикатори завантаження

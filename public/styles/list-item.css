@@ -1,0 +1,141 @@
+/* Стилі для елементів списків з кращою адаптивністю */
+.list-item {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-lg);
+    padding: var(--md-spacing-md);
+    box-shadow: var(--md-elevation-1);
+    transition: all var(--md-transition-standard);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
+    margin-bottom: var(--md-spacing-md);
+}
+
+.list-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--md-primary);
+}
+
+.list-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--md-elevation-3);
+}
+
+.list-item-details {
+    flex: 1;
+    max-width: calc(100% - 130px); /* Забезпечує місце для кнопок */
+    overflow: hidden;
+}
+
+.list-item-details h3 {
+    color: var(--md-text-high);
+    font-size: var(--md-font-size-subtitle);
+    font-weight: 500;
+    margin-bottom: var(--md-spacing-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-item-details p {
+    color: var(--md-text-medium);
+    font-size: var(--md-font-size-body);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-item-actions {
+    display: flex;
+    gap: var(--md-spacing-xs);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 120px;
+}
+
+/* Поліпшені стилі для кнопок */
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--md-surface-variant);
+    color: var(--md-text-medium);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--md-transition-standard);
+    font-size: 16px;
+    box-shadow: var(--md-elevation-1);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+}
+
+.action-btn:hover, .action-btn:focus {
+    background-color: rgba(224, 222, 244, 0.1);
+    color: var(--md-text-high);
+    transform: scale(1.1);
+    box-shadow: var(--md-elevation-2);
+}
+
+.action-btn.btn-edit:hover {
+    background-color: var(--md-secondary-dark);
+    color: white;
+}
+
+.action-btn.btn-confirm:hover {
+    background-color: var(--md-success);
+    color: white;
+}
+
+.action-btn.btn-cancel:hover {
+    background-color: var(--md-error);
+    color: white;
+}
+
+/* Адаптивність для малих екранів */
+@media (max-width: 400px) {
+    .list-item {
+        flex-direction: column;
+    }
+    
+    .list-item-details {
+        max-width: 100%;
+        margin-bottom: var(--md-spacing-sm);
+    }
+    
+    .list-item-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* Анімація появи */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.list-item {
+    animation: fadeUp 0.3s ease forwards;
+    animation-delay: calc(var(--delay, 0) * 0.05s);
+}
