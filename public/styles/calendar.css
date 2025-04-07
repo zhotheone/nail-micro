@@ -1,0 +1,273 @@
+/* Календар та розклад */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.calendar-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--foam);
+}
+
+.calendar-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.view-toggle {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.view-toggle-btn {
+    padding: 6px 12px;
+    border: none;
+    background-color: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all var(--transition-normal);
+}
+
+.view-toggle-btn:hover {
+    color: var(--text);
+}
+
+.view-toggle-btn.active {
+    background-color: var(--primary-color);
+    color: var(--base);
+}
+
+/* Режим перегляду за днями */
+.days-view {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-xs);
+    -webkit-overflow-scrolling: touch; /* Для кращої прокрутки на iOS */
+}
+
+.days-view::-webkit-scrollbar {
+    height: 4px;
+}
+
+.days-view::-webkit-scrollbar-track {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+}
+
+.days-view::-webkit-scrollbar-thumb {
+    background-color: var(--muted);
+    border-radius: var(--radius-md);
+}
+
+.day-header {
+    scroll-snap-align: start;
+    min-width: 60px;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: var(--radius-md);
+    background-color: var(--overlay);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    border: 1px solid transparent;
+}
+
+.day-header:hover {
+    transform: translateY(-2px);
+    border-color: var(--subtle);
+}
+
+.day-header.active {
+    background-color: var(--primary-color);
+    color: var(--base);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.day-header.today {
+    border: 1px dashed var(--foam);
+}
+
+.day-name {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.day-date {
+    font-size: 16px;
+    margin-top: 4px;
+}
+
+/* Місячний перегляд календаря */
+.month-view {
+    display: none;
+    margin-bottom: var(--spacing-md);
+}
+
+.month-view.active {
+    display: block;
+    animation: fadeIn var(--transition-normal);
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    background-color: var(--overlay);
+    border-radius: var(--radius-md);
+    padding: 8px;
+}
+
+.weekday-header {
+    text-align: center;
+    font-size: 12px;
+    color: var(--subtle);
+    padding: 8px 0;
+    font-weight: 500;
+}
+
+.month-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    border: 1px solid transparent;
+}
+
+.month-day:hover {
+    background-color: var(--surface);
+    border-color: var(--subtle);
+}
+
+.month-day.has-appointments::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background-color: var(--love);
+    border-radius: 50%;
+}
+
+.month-day.today {
+    background-color: var(--primary-color);
+    color: var(--base);
+}
+
+.month-day.selected {
+    border-color: var(--foam);
+    background-color: var(--overlay);
+    box-shadow: var(--shadow-sm);
+}
+
+.month-day.other-month {
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+/* Навігація календаря */
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.calendar-nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-circle);
+    border: none;
+    background-color: var(--overlay);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.calendar-nav-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--base);
+}
+
+.calendar-today-btn {
+    background-color: var(--overlay);
+    border: none;
+    color: var(--text);
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.calendar-today-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--base);
+}
+
+/* Анімація для перемикання календаря */
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.3s ease-out forwards;
+}
+
+/* Адаптивний дизайн для календаря */
+@media (min-width: 768px) {
+    .month-grid {
+        gap: 6px;
+        padding: 12px;
+    }
+    
+    .month-day {
+        font-size: 16px;
+    }
+    
+    .calendar-header {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .calendar-title {
+        font-size: 22px;
+    }
+}

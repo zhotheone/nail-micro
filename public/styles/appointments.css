@@ -1,0 +1,242 @@
+/* Список зустрічей */
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.appointment-item {
+    border-radius: var(--radius-md);
+    background-color: var(--surface);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    border-left: 3px solid var(--primary-color);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.appointment-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.appointment-time {
+    font-weight: bold;
+    margin-bottom: var(--spacing-xs);
+    color: var(--foam);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.appointment-time i {
+    font-size: 14px;
+}
+
+.appointment-client {
+    font-weight: bold;
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.appointment-client i {
+    color: var(--subtle);
+    font-size: 14px;
+}
+
+.appointment-service {
+    color: var(--subtle);
+    font-size: 14px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.appointment-price {
+    font-weight: 500;
+    color: var(--gold);
+    margin-bottom: var(--spacing-sm);
+    font-size: 14px;
+}
+
+.appointment-notes {
+    background-color: var(--overlay);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    font-size: 13px;
+    border-left: 2px solid var(--subtle);
+}
+
+.appointment-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    border-radius: var(--radius-lg);
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all var(--transition-normal);
+}
+
+.action-btn i {
+    font-size: 14px;
+}
+
+.btn-confirm {
+    background-color: var(--success-color);
+    color: var(--text);
+}
+
+.btn-confirm:hover {
+    background-color: var(--success-color);
+    filter: brightness(1.1);
+}
+
+.btn-edit {
+    background-color: var(--pine);
+    color: var(--text);
+}
+
+.btn-edit:hover {
+    background-color: var(--pine);
+    filter: brightness(1.1);
+}
+
+.btn-cancel {
+    background-color: var(--danger-color);
+    color: var(--text);
+}
+
+.btn-cancel:hover {
+    background-color: var(--danger-color);
+    filter: brightness(1.1);
+}
+
+.no-appointments {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: var(--muted);
+}
+
+/* Статуси */
+.status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+}
+
+.status-pending {
+    background-color: var(--gold);
+    color: var(--base);
+}
+
+.status-confirmed {
+    background-color: var(--pine);
+    color: var(--text);
+}
+
+.status-completed {
+    background-color: var(--foam);
+    color: var(--surface);
+}
+
+.status-cancelled {
+    background-color: var(--danger-color);
+    color: var(--text);
+}
+
+/* Різні стилі запису в залежності від статусу */
+.appointment-item.pending {
+    border-left-color: var(--gold);
+}
+
+.appointment-item.confirmed {
+    border-left-color: var(--pine);
+}
+
+.appointment-item.completed {
+    border-left-color: var(--foam);
+}
+
+.appointment-item.cancelled {
+    border-left-color: var(--danger-color);
+    opacity: 0.8;
+}
+
+.appointment-item.cancelled::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(0, 0, 0, 0.05) 10px,
+        rgba(0, 0, 0, 0.05) 20px
+    );
+    pointer-events: none;
+}
+
+/* Анімації для записів */
+.appointment-item.new {
+    animation: highlightNew 2s ease-in-out;
+}
+
+@keyframes highlightNew {
+    0%, 100% {
+        background-color: var(--surface);
+    }
+    20%, 80% {
+        background-color: var(--overlay);
+    }
+}
+
+/* Адаптивність списку записів */
+@media (min-width: 768px) {
+    .appointments-list {
+        gap: var(--spacing-lg);
+    }
+    
+    .appointment-item {
+        padding: var(--spacing-lg);
+        display: grid;
+        grid-template-columns: 2fr 3fr 2fr;
+        align-items: center;
+    }
+    
+    .appointment-item-left {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .appointment-item-middle {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .appointment-item-right {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    
+    .appointment-actions {
+        justify-content: flex-end;
+    }
+}

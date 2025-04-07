@@ -1,0 +1,59 @@
+/* Змінні кольорів і розмірів */
+:root {
+    /* Rose Pine Theme */
+    --base: #191724;
+    --surface: #1f1d2e;
+    --overlay: #26233a;
+    --muted: #6e6a86;
+    --subtle: #908caa;
+    --text: #e0def4;
+    --love: #eb6f92;
+    --gold: #f6c177;
+    --rose: #ebbcba;
+    --pine: #31748f;
+    --foam: #9ccfd8;
+    --iris: #c4a7e7;
+
+    /* Функціональні кольори */
+    --primary-color: var(--rose);
+    --secondary-color: var(--surface);
+    --accent-color: var(--love);
+    --light-bg: var(--overlay);
+    --border-color: var(--muted);
+    --success-color: var(--pine);
+    --warning-color: var(--gold);
+    --danger-color: var(--love);
+    --info-color: var(--foam);
+
+    /* Розміри */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Радіуси */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-circle: 50%;
+    
+    /* Тіні */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+    
+    /* Анімації */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Z-індекси */
+    --z-below: -1;
+    --z-normal: 1;
+    --z-above: 10;
+    --z-modal: 100;
+    --z-toast: 200;
+    --z-tooltip: 300;
+}

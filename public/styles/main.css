@@ -1,0 +1,13 @@
+/* Імпорт всіх стилів */
+@import 'variables.css';
+@import 'layout.css';
+@import 'nav.css';
+@import 'calendar.css';
+@import 'appointments.css';
+@import 'clients.css';
+@import 'procedures.css';
+@import 'forms.css';
+@import 'modals.css';
+@import 'toast.css';
+@import 'stats.css';
+@import 'utilities.css';

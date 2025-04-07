@@ -1,0 +1,170 @@
+/* Стилі для сторінки клієнтів */
+.clients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.clients-header h2 {
+    color: var(--foam);
+    font-size: 1.5rem;
+}
+
+/* Пошук клієнтів */
+.search-container {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: var(--spacing-sm) 0;
+    background-color: var(--base);
+    margin-bottom: var(--spacing-md);
+}
+
+#client-search {
+    background-color: var(--overlay);
+    padding-left: 35px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236e6a86' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+/* Картка клієнта */
+.client-card {
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.client-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.client-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.client-info {
+    margin-bottom: var(--spacing-sm);
+}
+
+.client-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--foam);
+    margin-bottom: var(--spacing-xs);
+}
+
+.client-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.client-contact p {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--subtle);
+}
+
+.client-contact i {
+    color: var(--muted);
+}
+
+.client-stats {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+}
+
+.client-stat {
+    flex: 1;
+    text-align: center;
+}
+
+.client-stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--rose);
+}
+
+.client-stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.trust-rating {
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-top: var(--spacing-xs);
+}
+
+.client-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+/* Список клієнтів */
+#clients-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+    #clients-list-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Дії над клієнтом */
+.list-item-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.list-item-details h3 {
+    color: var(--foam);
+    margin-bottom: var(--spacing-xs);
+}
+
+.list-item-details p {
+    color: var(--subtle);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Анімація появи */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.list-item {
+    animation: fadeUp 0.3s ease forwards;
+    animation-delay: calc(var(--delay, 0) * 0.05s);
+}

@@ -1,0 +1,105 @@
+/* Стилі для сповіщень (тости) */
+#toast-container {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.toast {
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+    color: var(--text);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-icon {
+    margin-right: var(--spacing-md);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex-grow: 1;
+}
+
+.toast-title {
+    font-weight: bold;
+    margin-bottom: var(--spacing-xs);
+}
+
+.toast-message {
+    font-size: 14px;
+}
+
+.toast-close {
+    margin-left: var(--spacing-md);
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+/* Типи тостів */
+.toast-success {
+    background-color: var(--success-color);
+}
+
+.toast-error {
+    background-color: var(--danger-color);
+}
+
+.toast-warning {
+    background-color: var(--warning-color);
+    color: var(--base);
+}
+
+.toast-info {
+    background-color: var(--info-color);
+    color: var(--base);
+}
+
+/* Анімація для авто-закриття */
+@keyframes toast-progress {
+    0% {
+        width: 100%;
+    }
+    100% {
+        width: 0;
+    }
+}
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.toast-progress.active {
+    animation: toast-progress 3s linear forwards;
+}

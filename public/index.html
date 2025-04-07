@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Master App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Основний вміст -->
+        <div class="content">
+            <!-- Вкладка Розклад -->
+            <div id="schedule-tab" class="tab-content active fade-in">
+                <div class="calendar-header">
+                    <div class="calendar-title" id="calendar-month">Завантаження...</div>
+                    <div class="calendar-actions">
+                        <div class="view-toggle">
+                            <button class="view-toggle-btn active" data-view="week">Тиждень</button>
+                            <button class="view-toggle-btn" data-view="month">Місяць</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Перегляд за днями (тиждень) -->
+                <div class="days-view" id="days-view">
+                    <div class="loader"></div>
+                </div>
+
+                <!-- Місячний перегляд календаря -->
+                <div class="month-view" id="month-view">
+                    <div class="month-grid" id="month-grid">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+
+                <!-- Список записів на вибраний день -->
+                <div class="appointments-list" id="appointments-list">
+                    <div class="loader"></div>
+                </div>
+            </div>
+
+            <!-- Вкладка Клієнти -->
+            <div id="clients-tab" class="tab-content fade-in">
+                <div id="clients-list">
+                    <div class="loader"></div>
+                </div>
+            </div>
+
+            <!-- Вкладка Процедури -->
+            <div id="procedures-tab" class="tab-content fade-in">
+                <div id="procedures-list">
+                    <div class="loader"></div>
+                </div>
+            </div>
+
+            <!-- Вкладка Статистика -->
+            <div id="stats-tab" class="tab-content fade-in">
+                <div class="stats-header">
+                    <h2>Статистика бізнесу</h2>
+                    <div class="period-selector">
+                        <button class="period-btn" data-period="week">Тиждень</button>
+                        <button class="period-btn active" data-period="month">Місяць</button>
+                        <button class="period-btn" data-period="year">Рік</button>
+                    </div>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stats-card" id="total-earnings">
+                        <div class="stats-card-title">Загальний дохід</div>
+                        <div class="stats-card-value">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <div class="stats-card" id="total-clients">
+                        <div class="stats-card-title">Клієнти</div>
+                        <div class="stats-card-value">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <div class="stats-card" id="total-appointments">
+                        <div class="stats-card-title">Записи</div>
+                        <div class="stats-card-value">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    <div class="stats-card" id="avg-earning">
+                        <div class="stats-card-title">Середній чек</div>
+                        <div class="stats-card-value">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-charts">
+                    <div class="stats-chart-container">
+                        <h3>Доходи за період</h3>
+                        <div id="earnings-chart" class="stats-chart">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-chart-container">
+                        <h3>Популярні процедури</h3>
+                        <div id="procedures-chart" class="stats-chart">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-tables">
+                    <div class="stats-table-container">
+                        <h3>Найкращі клієнти</h3>
+                        <div id="top-clients">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-table-container">
+                        <h3>Найкращі дні</h3>
+                        <div id="top-days">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Нижня навігація -->
+        <div class="main-nav">
+            <a href="#" class="tab-btn active" data-tab="schedule">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Розклад</span>
+            </a>
+            <a href="#" class="tab-btn" data-tab="clients">
+                <i class="fas fa-users"></i>
+                <span>Клієнти</span>
+            </a>
+            <a href="#" class="tab-btn" data-tab="procedures">
+                <i class="fas fa-paint-brush"></i>
+                <span>Процедури</span>
+            </a>
+            <a href="#" class="tab-btn" data-tab="stats">
+                <i class="fas fa-chart-line"></i>
+                <span>Статистика</span>
+            </a>
+        </div>
+
+        <!-- Плаваюча кнопка додавання -->
+        <div class="fab" id="add-button">
+            <i class="fas fa-plus"></i>
+        </div>
+
+        <!-- Модальне вікно для додавання запису -->
+        <div class="modal" id="booking-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Новий запис</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label class="form-label">Клієнт</label>
+                        <select class="form-control" name="clientId" required id="booking-client-select">
+                            <option value="">Оберіть клієнта</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Процедура</label>
+                        <select class="form-control" name="procedureId" required id="booking-procedure-select">
+                            <option value="">Оберіть процедуру</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Дата</label>
+                        <input type="date" class="form-control" name="date" required id="booking-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Час (згідно розкладу)</label>
+                        <select class="form-control" name="time" required id="booking-time-select">
+                            <option value="">Оберіть час</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ціна (грн)</label>
+                        <input type="number" class="form-control" name="price" required id="booking-price">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Статус</label>
+                        <select class="form-control" name="status" required>
+                            <option value="pending">Очікує</option>
+                            <option value="confirmed">Підтверджено</option>
+                            <option value="completed">Виконано</option>
+                            <option value="cancelled">Скасовано</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Коментар</label>
+                        <textarea class="form-control" name="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Зберегти</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальне вікно для додавання клієнта -->
+        <div class="modal" id="client-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Новий клієнт</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="client-form">
+                    <div class="form-group">
+                        <label class="form-label">Ім'я</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Прізвище</label>
+                        <input type="text" class="form-control" name="surName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" name="phoneNum" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Instagram</label>
+                        <input type="text" class="form-control" name="instagram">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Рейтинг довіри</label>
+                        <select class="form-control" name="trustRating">
+                            <option value="5">★★★★★ (5 зірок)</option>
+                            <option value="4">★★★★☆ (4 зірки)</option>
+                            <option value="3">★★★☆☆ (3 зірки)</option>
+                            <option value="2">★★☆☆☆ (2 зірки)</option>
+                            <option value="1">★☆☆☆☆ (1 зірка)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Зберегти</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальне вікно для додавання процедури -->
+        <div class="modal" id="procedure-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Нова процедура</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="procedure-form">
+                    <div class="form-group">
+                        <label class="form-label">Назва</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ціна (грн)</label>
+                        <input type="number" class="form-control" name="price" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Тривалість (хв)</label>
+                        <input type="number" class="form-control" name="timeToComplete" required>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Зберегти</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальне вікно для редагування запису -->
+        <div class="modal" id="edit-appointment-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Редагування запису</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="edit-appointment-form">
+                    <input type="hidden" name="id" id="edit-appointment-id">
+                    <div class="form-group">
+                        <label class="form-label">Клієнт</label>
+                        <select class="form-control" name="clientId" required id="edit-appointment-client">
+                            <option value="">Оберіть клієнта</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Процедура</label>
+                        <select class="form-control" name="procedureId" required id="edit-appointment-procedure">
+                            <option value="">Оберіть процедуру</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Дата</label>
+                        <input type="date" class="form-control" name="date" required id="edit-appointment-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Час</label>
+                        <input type="time" class="form-control" name="time" required id="edit-appointment-time">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ціна (грн)</label>
+                        <input type="number" class="form-control" name="price" required id="edit-appointment-price">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Фінальна ціна (грн)</label>
+                        <input type="number" class="form-control" name="finalPrice" required id="edit-appointment-finalPrice">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Статус</label>
+                        <select class="form-control" name="status" required id="edit-appointment-status">
+                            <option value="pending">Очікує</option>
+                            <option value="confirmed">Підтверджено</option>
+                            <option value="completed">Виконано</option>
+                            <option value="cancelled">Скасовано</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Коментар</label>
+                        <textarea class="form-control" name="notes" rows="3" id="edit-appointment-notes"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Зберегти зміни</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Контейнер для сповіщень -->
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- Підключення модульних скриптів -->
+    <script src="scripts/api.js"></script>
+    <script src="scripts/toast.js"></script>
+    <script src="scripts/modals.js"></script>
+    <script src="scripts/forms.js"></script>
+    <script src="scripts/calendar.js"></script>
+    <script src="scripts/appointments.js"></script>
+    <script src="scripts/schedule.js"></script>
+    <script src="scripts/clients.js"></script>
+    <script src="scripts/procedures.js"></script>
+    <script src="scripts/stats.js"></script>
+    <script src="scripts/router.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</body>
+</html>

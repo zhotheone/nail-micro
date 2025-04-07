@@ -1,0 +1,207 @@
+/* Стилі для статистики */
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.stats-header h2 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.period-selector {
+    display: flex;
+    background-color: var(--light-bg);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.period-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--subtle);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.period-btn.active {
+    background-color: var(--primary-color);
+    color: var(--base);
+}
+
+/* Картки статистики */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stats-card {
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.stats-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.stats-card-title {
+    font-size: 0.9rem;
+    color: var(--subtle);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stats-card-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--text);
+    margin-top: auto;
+}
+
+.stats-card-trend {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-top: var(--spacing-xs);
+}
+
+.stats-card-trend.positive {
+    color: var(--success-color);
+}
+
+.stats-card-trend.negative {
+    color: var(--danger-color);
+}
+
+.stats-card-trend i {
+    margin-right: var(--spacing-xs);
+}
+
+/* Графіки */
+.stats-charts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stats-chart-container {
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-chart-container h3 {
+    color: var(--foam);
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stats-chart {
+    height: 300px;
+    width: 100%;
+    position: relative;
+}
+
+/* Таблиці */
+.stats-tables {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stats-table-container {
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-table-container h3 {
+    color: var(--foam);
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-table th,
+.stats-table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stats-table th {
+    color: var(--subtle);
+    font-weight: normal;
+}
+
+.stats-table tr:last-child td {
+    border-bottom: none;
+}
+
+.stats-table tr:hover td {
+    background-color: var(--overlay);
+}
+
+/* Адаптивність */
+@media (min-width: 768px) {
+    .stats-charts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stats-tables {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Доповнення до графіків Chart.js */
+canvas {
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
+}

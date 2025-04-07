@@ -1,0 +1,175 @@
+/* Базовий стиль і компоновка */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Fira Code', monospace;
+}
+
+body {
+    background-color: var(--base);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Основний вміст */
+.content {
+    padding: var(--spacing-md);
+    margin-bottom: 60px; /* Для навігаційного меню внизу */
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Відображення вкладок */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Плаваюча кнопка додавання */
+.fab {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-circle);
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--base);
+    font-size: 24px;
+    box-shadow: var(--shadow-md);
+    z-index: var(--z-above);
+    cursor: pointer;
+    transition: transform var(--transition-normal), background-color var(--transition-normal);
+}
+
+.fab:hover {
+    transform: scale(1.1);
+    background-color: var(--accent-color);
+}
+
+.fab:active {
+    transform: scale(0.95);
+}
+
+/* Анімації */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-normal);
+}
+
+/* Порожній стан */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: var(--muted);
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+
+.empty-state h3 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--foam);
+}
+
+.empty-state p {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Лоадер */
+.loader {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--muted);
+    border-bottom-color: var(--primary-color);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin: var(--spacing-md) auto;
+}
+
+.btn-loader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--base);
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: none;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+button.loading .btn-text {
+    display: none;
+}
+
+button.loading .btn-loader {
+    display: inline-block;
+}
+
+/* Контейнер для завантаження */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+.loading-container p {
+    margin-top: var(--spacing-md);
+    color: var(--muted);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .content {
+        padding: var(--spacing-sm);
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+    }
+}
