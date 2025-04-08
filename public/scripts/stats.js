@@ -420,6 +420,8 @@ const Stats = {
         const backgroundColor = style.getPropertyValue('--md-background').trim() || '#191724';
         const textMediumColor = style.getPropertyValue('--md-text-medium').trim() || 'rgba(224, 222, 244, 0.7)';
         const onBackgroundColor = style.getPropertyValue('--md-on-background').trim() || '#e0def4';
+        // Додана відсутня змінна
+        const surfaceVariantColor = style.getPropertyValue('--md-surface-variant').trim() || '#26233a';
         
         // Кольори для графіка
         const colors = [
