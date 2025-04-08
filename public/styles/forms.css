@@ -269,3 +269,50 @@ input[type="radio"].form-check-input:checked::after {
 .form-animate .form-group:nth-child(6) { animation-delay: 0.3s; }
 .form-animate .form-group:nth-child(7) { animation-delay: 0.35s; }
 .form-animate .form-group:nth-child(8) { animation-delay: 0.4s; }
+
+/* Покращена адаптивність форм */
+@media (max-width: var(--breakpoint-sm)) {
+    .form-group {
+        margin-bottom: var(--md-spacing-md);
+    }
+    
+    .form-control {
+        height: 48px;
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        height: 46px;
+        font-size: 15px;
+    }
+    
+    select.form-control {
+        background-position: right 12px center;
+        padding-right: 36px;
+    }
+}
+
+@media (min-width: var(--breakpoint-md)) {
+    .form-row {
+        display: flex;
+        margin-left: -8px;
+        margin-right: -8px;
+        flex-wrap: wrap;
+    }
+    
+    .form-col {
+        flex: 1;
+        padding-left: 8px;
+        padding-right: 8px;
+        min-width: 200px;
+    }
+    
+    .form-col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}

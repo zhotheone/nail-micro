@@ -193,24 +193,37 @@ button.loading .btn-loader {
 }
 
 /* Адаптивність */
-@media (max-width: 600px) {
+@media (max-width: var(--breakpoint-sm)) {
     .content {
         padding: var(--md-spacing-sm);
+        margin-bottom: 64px;
     }
     
     .fab {
         bottom: 72px;
         right: 16px;
+        width: 48px;
+        height: 48px;
     }
-}
-
-@media (min-width: 600px) and (max-width: 960px) {
-    .content {
+    
+    .empty-state {
         padding: var(--md-spacing-md);
     }
+    
+    .empty-state i {
+        font-size: 36px;
+        margin-bottom: var(--md-spacing-sm);
+    }
 }
 
-@media (min-width: 960px) {
+@media (min-width: var(--breakpoint-sm)) and (max-width: var(--breakpoint-lg)) {
+    .content {
+        padding: var(--md-spacing-md);
+        margin-bottom: 80px;
+    }
+}
+
+@media (min-width: var(--breakpoint-lg)) {
     .container {
         padding-left: 0;
         padding-right: 0;
@@ -218,5 +231,11 @@ button.loading .btn-loader {
     
     .content {
         padding: var(--md-spacing-lg);
+        max-width: 1400px;
+        margin-top: var(--md-spacing-md);
+    }
+    
+    .fab:hover {
+        transform: scale(1.1);
     }
 }

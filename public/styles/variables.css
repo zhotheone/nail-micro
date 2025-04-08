@@ -44,6 +44,7 @@
     --md-spacing-md: calc(var(--md-spacing-unit) * 3); /* 24px */
     --md-spacing-lg: calc(var(--md-spacing-unit) * 4); /* 32px */
     --md-spacing-xl: calc(var(--md-spacing-unit) * 6); /* 48px */
+    --md-spacing-xxl: calc(var(--md-spacing-unit) * 8); /* 64px - Added for extra large spacing */
     
     /* Радіуси заокруглень */
     --md-radius-sm: 4px;
@@ -63,6 +64,28 @@
     --md-z-modal: 32;
     --md-z-toast: 64;
     --md-z-tooltip: 128;
+    --md-z-fab: 96; /* Added FAB z-index */
+    
+    /* Типографіка */
+    --md-font-family: 'Fira Code', 'Roboto', sans-serif;
+    --md-font-size-small: 12px;
+    --md-font-size-body: 14px;
+    --md-font-size-subtitle: 16px;
+    --md-font-size-title: 20px;
+    --md-font-size-headline: 24px;
+    --md-font-size-display: 34px; /* Added for larger display text */
+    
+    /* Розміри кнопок та полів вводу */
+    --md-button-height: 36px;
+    --md-button-large-height: 48px; /* Added for larger buttons */
+    --md-input-height: 56px;
+    
+    /* Медіа запити */
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
     
     /* Підтримка старих змінних (для забезпечення сумісності) */
     --base: var(--md-background);
@@ -114,16 +137,4 @@
     --z-modal: var(--md-z-modal);
     --z-toast: var(--md-z-toast);
     --z-tooltip: var(--md-z-tooltip);
-    
-    /* Типографіка */
-    --md-font-family: 'Roboto', 'Fira Code', sans-serif;
-    --md-font-size-small: 12px;
-    --md-font-size-body: 14px;
-    --md-font-size-subtitle: 16px;
-    --md-font-size-title: 20px;
-    --md-font-size-headline: 24px;
-    
-    /* Розміри кнопок та полів вводу */
-    --md-button-height: 36px;
-    --md-input-height: 56px;
 }

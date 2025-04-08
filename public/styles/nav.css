@@ -81,7 +81,21 @@
 }
 
 /* Адаптивність навігації */
-@media (min-width: 600px) {
+@media (max-width: var(--breakpoint-sm)) {
+    .main-nav {
+        height: 56px;
+    }
+    
+    .tab-btn {
+        font-size: 10px;
+    }
+    
+    .tab-btn i {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: var(--breakpoint-sm)) {
     .main-nav {
         max-width: 480px;
         left: 50%;
@@ -91,7 +105,7 @@
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: var(--breakpoint-xl)) {
     .main-nav {
         position: fixed;
         bottom: auto;

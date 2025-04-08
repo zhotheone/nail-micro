@@ -3,10 +3,11 @@
     position: fixed;
     bottom: 80px;
     right: 24px;
-    z-index: var(--md-z-navbar);
+    z-index: var(--md-z-fab);
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column-reverse; /* Важливо! Забезпечує появу головної кнопки під міні-кнопками */
     align-items: center;
+    gap: 12px; /* Додаємо відступ між кнопками */
 }
 
 /* Головна кнопка FAB */
@@ -26,7 +27,7 @@
     position: relative;
     overflow: hidden;
     transform: rotate(0deg);
-    z-index: 10;
+    z-index: 5; /* Нижчий z-index, ніж у міні-кнопок */
 }
 
 .fab-main i {
@@ -62,32 +63,37 @@
     justify-content: center;
     box-shadow: var(--md-elevation-2);
     cursor: pointer;
-    margin-bottom: 12px;
+    margin-bottom: 0; /* Видаляємо margin, який може впливати на розташування */
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.2s ease;
     opacity: 0;
     transform: translateY(20px) scale(0.8);
     pointer-events: none;
     position: relative;
     border: none;
+    z-index: 10; /* Вищий z-index, ніж у головної кнопки */
 }
 
 .fab-mini i {
     font-size: 18px;
 }
 
+/* Стилі міні-кнопок відповідно до типу */
+.fab-mini.appointment {
+    background-color: var(--md-primary-light);
+    color: var(--md-on-primary);
+    z-index: 10;
+}
+
 .fab-mini.client {
     background-color: var(--md-secondary);
     color: var(--md-on-secondary);
+    z-index: 11;
 }
 
 .fab-mini.procedure {
     background-color: var(--md-secondary-dark);
     color: var(--md-on-primary);
-}
-
-.fab-mini.appointment {
-    background-color: var(--md-primary-light);
-    color: var(--md-on-primary);
+    z-index: 12;
 }
 
 /* Активний стан мініатюрних кнопок */
@@ -95,6 +101,8 @@
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    /* Важливо забезпечити, щоб активні міні-кнопки дійсно були поверх головної */
+    z-index: 10;
 }
 
 .fab-mini:hover {
@@ -121,6 +129,7 @@
     transform: translateX(10px);
     transition: all 0.2s ease;
     pointer-events: none;
+    z-index: 15; /* Вище, ніж у всіх кнопок */
 }
 
 .fab-mini:hover .fab-label {
@@ -146,14 +155,6 @@
 .fab-overlay.active {
     opacity: 1;
     visibility: visible;
-}
-
-/* Адаптивність */
-@media (max-width: 768px) {
-    .fab-container {
-        bottom: 70px;
-        right: 16px;
-    }
 }
 
 /* Ефект хвиль (ripple) */
@@ -189,107 +190,44 @@
     animation: fab-appear 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
 }
 
-/* Додаткові стилі для FAB */
-
-/* Переконуємося, що контейнер використовує column-reverse для правильного порядку */
-.fab-container {
-    position: fixed;
-    bottom: 80px;
-    right: 24px;
-    z-index: var(--md-z-navbar);
-    display: flex;
-    flex-direction: column-reverse; /* Важливо! Забезпечує появу головної кнопки під міні-кнопками */
-    align-items: center;
-    gap: 12px; /* Додаємо відступ між кнопками */
+/* Адаптивність для FAB */
+@media (max-width: var(--breakpoint-sm)) {
+    .fab-container {
+        bottom: 70px;
+        right: 16px;
+        gap: 10px;
+    }
+    
+    .fab-main {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .fab-mini {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .fab-mini i {
+        font-size: 16px;
+    }
+    
+    .fab-label {
+        padding: 3px 10px;
+        font-size: 11px;
+        right: 44px;
+    }
 }
 
-/* Головна кнопка FAB розташована внизу (візуально) але першим елементом у DOM */
-.fab-main {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background-color: var(--md-primary);
-    color: var(--md-on-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--md-elevation-3);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    border: none;
-    position: relative;
-    overflow: hidden;
-    transform: rotate(0deg);
-    z-index: 5; /* Нижчий z-index, ніж у міні-кнопок */
+@media (min-width: var(--breakpoint-md)) {
+    .fab-container {
+        bottom: var(--md-spacing-xl);
+        right: var(--md-spacing-lg);
+    }
 }
 
-/* Міні-кнопки мають вищий z-index, щоб бути поверх головної */
-.fab-mini {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--md-elevation-2);
-    cursor: pointer;
-    margin-bottom: 0; /* Видаляємо margin, який може впливати на розташування */
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.2s ease;
-    opacity: 0;
-    transform: translateY(20px) scale(0.8);
-    pointer-events: none;
-    position: relative;
-    border: none;
-    z-index: 10; /* Вищий z-index, ніж у головної кнопки */
-}
-
-/* Активні міні-кнопки повинні правильно відображатися */
-.fab-container.active .fab-mini {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-    /* Важливо забезпечити, щоб активні міні-кнопки дійсно були поверх головної */
-    z-index: 10;
-}
-
-/* Стилі міні-кнопок відповідно до типу */
-.fab-mini.appointment {
-    background-color: var(--md-primary-light);
-    color: var(--md-on-primary);
-    z-index: 10;
-}
-
-.fab-mini.client {
-    background-color: var(--md-secondary);
-    color: var(--md-on-secondary);
-    z-index: 11;
-}
-
-.fab-mini.procedure {
-    background-color: var(--md-secondary-dark);
-    color: var(--md-on-primary);
-    z-index: 12;
-}
-
-/* Забезпечуємо, щоб підказки (labels) були видимі */
-.fab-label {
-    position: absolute;
-    right: 50px;
-    background-color: var(--md-surface);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: var(--md-text-high);
-    white-space: nowrap;
-    box-shadow: var(--md-elevation-1);
-    opacity: 0;
-    transform: translateX(10px);
-    transition: all 0.2s ease;
-    pointer-events: none;
-    z-index: 15; /* Вище, ніж у всіх кнопок */
-}
-
-.fab-mini:hover .fab-label {
-    opacity: 1;
-    transform: translateX(0);
+@media (min-width: var(--breakpoint-xl)) {
+    .fab-container {
+        right: var(--md-spacing-xl);
+    }
 }

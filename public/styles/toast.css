@@ -153,6 +153,7 @@
     #toast-container {
         bottom: 70px;
         max-width: 90%;
+        width: calc(100% - 32px);
     }
     
     .toast {

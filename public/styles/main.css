@@ -14,6 +14,8 @@
 @import 'list-item.css';
 @import 'fab.css';
 @import 'export-timetable.css';
+@import 'schedule.css';
+@import 'responsive.css';
 
 /* Export Type Button Styles */
 .export-type-buttons {
@@ -26,12 +28,12 @@
     flex: 1;
     padding: 10px 15px;
     border-radius: 6px;
-    border: 1px solid #26233a;
-    background-color: #1f1d2e;
-    color: #e0def4;
+    border: 1px solid var(--md-surface-variant);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
     font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all var(--md-transition-standard);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,15 +41,15 @@
 }
 
 .export-type-btn:hover {
-    background-color: #2a273f;
+    background-color: var(--md-surface-variant);
 }
 
 .export-type-btn.active {
-    background-color: #eb6f92;
-    border-color: #eb6f92;
-    color: #fff;
+    background-color: var(--md-primary);
+    border-color: var(--md-primary);
+    color: var(--md-on-primary);
     font-weight: 500;
-    box-shadow: 0 2px 5px rgba(235, 111, 146, 0.3);
+    box-shadow: var(--md-elevation-2);
 }
 
 .export-type-btn i {
@@ -55,8 +57,12 @@
 }
 
 /* Make buttons responsive on smaller screens */
-@media (max-width: 576px) {
+@media (max-width: var(--breakpoint-sm)) {
     .export-type-buttons {
         flex-direction: column;
+    }
+    
+    .export-type-btn {
+        margin-bottom: 8px;
     }
 }

@@ -178,7 +178,34 @@
 }
 
 /* Адаптивність модальних вікон */
-@media (min-width: 600px) {
+@media (max-width: var(--breakpoint-sm)) {
+    .modal-content {
+        padding: var(--md-spacing-md);
+        border-radius: var(--md-radius-lg) var(--md-radius-lg) 0 0;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding-bottom: var(--md-spacing-xs);
+        margin-bottom: var(--md-spacing-sm);
+    }
+    
+    .modal-title {
+        font-size: var(--md-font-size-subtitle);
+    }
+    
+    .modal-close {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .modal-dialog .modal-content, 
+    .modal-confirm .modal-content {
+        width: 95%;
+    }
+}
+
+@media (min-width: var(--breakpoint-sm)) {
     .modal-content {
         max-width: 540px;
         margin: 0 auto;
@@ -193,12 +220,16 @@
     }
 }
 
-@media (min-width: 960px) {
+@media (min-width: var(--breakpoint-md)) {
     .modal-content {
         max-width: 640px;
     }
     
     .modal-confirm .modal-content {
         max-width: 400px;
+    }
+    
+    .modal-large .modal-content {
+        max-width: 800px;
     }
 }

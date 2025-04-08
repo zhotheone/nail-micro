@@ -123,7 +123,40 @@
     }
 }
 
-/* Анімація появи */
+/* Покращена адаптивність для списків */
+@media (max-width: var(--breakpoint-sm)) {
+    .list-item {
+        padding: var(--md-spacing-sm);
+        margin-bottom: var(--md-spacing-sm);
+    }
+    
+    .list-item-details h3 {
+        font-size: var(--md-font-size-body);
+    }
+    
+    .list-item-details p {
+        font-size: 13px;
+    }
+    
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: var(--breakpoint-lg)) {
+    .list-item:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--md-elevation-4);
+    }
+    
+    .action-btn:hover {
+        transform: scale(1.15);
+    }
+}
+
+/* Стандартизована анімація появи */
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -136,6 +169,6 @@
 }
 
 .list-item {
-    animation: fadeUp 0.3s ease forwards;
+    animation: fadeUp var(--md-transition-standard) forwards;
     animation-delay: calc(var(--delay, 0) * 0.05s);
 }

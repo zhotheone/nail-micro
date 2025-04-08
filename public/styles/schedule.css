@@ -163,3 +163,30 @@
 .slot-dot.available {
     background-color: var(--pine);
 }
+
+/* Покращена адаптивність для розкладу */
+@media (max-width: var(--breakpoint-sm)) {
+    .schedule-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .schedule-tabs {
+        padding-bottom: 2px;
+    }
+    
+    .schedule-tab {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 13px;
+    }
+    
+    .day-schedule-form {
+        padding: var(--spacing-sm);
+    }
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    .time-slots {
+        grid-template-columns: 1fr;
+    }
+}
